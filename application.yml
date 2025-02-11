@@ -9,4 +9,3 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: validate
-    database-platform: org.hibernate.dialect.MySQLDialect
