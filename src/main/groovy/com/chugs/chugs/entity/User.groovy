@@ -1,6 +1,6 @@
 package com.chugs.chugs.entity
 
-
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 
 @Entity
@@ -26,8 +27,8 @@ class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "user_type")
     UserType userType
-//    @OneToMany(mappedBy = "User", cascade = CascadeType.ALL, orphanRemoval = true)
-//    List<OrderTable> orders = new ArrayList<>()
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<OrderTable> orders = []
     enum UserType {
         ADMIN, STAFF, WAITER, CUSTOMER
     }
