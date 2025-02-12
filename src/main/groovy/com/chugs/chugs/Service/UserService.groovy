@@ -21,6 +21,10 @@ class UserService {
     }
     // Create a new user
     User createUser(User user) {
+        //verificar que el correo aun no este dado de alta
+        userRepository.findByEmail(user.email).ifPresent {
+            throw new IllegalArgumentException("Email already in use")
+        }
         return userRepository.save(user)
     }
 
@@ -42,5 +46,11 @@ class UserService {
     // Delete user by ID
     void deleteUser(Long id) {
         userRepository.deleteById(id)
+    }
+
+    void setPassword(User user, String password) {
+        user.passwordHash = password
+        //hashed password already done
+        userRepository.save(user)
     }
 }

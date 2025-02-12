@@ -29,6 +29,6 @@ class User {
 //    @OneToMany(mappedBy = "User", cascade = CascadeType.ALL, orphanRemoval = true)
 //    List<OrderTable> orders = new ArrayList<>()
     enum UserType {
-        ADMIN, STAFF, WAITER
+        ADMIN, STAFF, WAITER, CUSTOMER
     }
 }
