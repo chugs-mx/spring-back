@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
@@ -22,6 +23,13 @@ class UserController {
 
     @PostMapping("/user")
     User createUser() {
+        User user = new User();
+        user.name = "Erick"
+        user.email = "erickdjm@ellucia.com"
+        user.passwordHash = "ADHW@&da21273"
+        user.userType = User.UserType.ADMIN
+        userService.createUser(user)
+
         //check if it is not already created
         //required fields
         //format checks
