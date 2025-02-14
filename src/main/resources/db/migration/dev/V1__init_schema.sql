@@ -56,6 +56,7 @@ CREATE TABLE payment (
     ticket_id      BIGINT NOT NULL,
     payment_method VARCHAR(20) NOT NULL,
     amount_paid    DECIMAL(12,2) NOT NULL,
+    date_payment   TIMESTAMP NOT NULL,
     FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id)
 );
 
