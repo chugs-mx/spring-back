@@ -2,6 +2,8 @@ package com.chugs.chugs.entity
 
 import jakarta.persistence.*
 
+import java.time.LocalDateTime
+
 @Entity
 @Table(name = "payment")
 class Payment {
@@ -19,6 +21,9 @@ class Payment {
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
     Ticket ticket
+
+    @Column(nullable = false)
+    LocalDateTime datePayment
 
     enum PaymentMethod {
         CASH, CREDIT_CARD, DEBIT_CARD
