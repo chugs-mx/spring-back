@@ -9,14 +9,11 @@ class RestaurantTable {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     Long tableId
 
-    @Column(nullable = false, columnDefinition = "SMALLINT UNSIGNED")
-    int tableNumber
-
-    @Column(nullable = false, columnDefinition = "SMALLINT UNSIGNED")
+    @Column(name = "seat_number", nullable = false, columnDefinition = "SMALLINT UNSIGNED")
     int seatNumber
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "table_state", nullable = false)
     TableState tableState
 
     enum TableState {

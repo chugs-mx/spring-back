@@ -11,6 +11,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 
+import java.time.LocalDateTime
+
 @Entity
 @Table(name = "app_user")
 class User {
@@ -18,17 +20,26 @@ class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     Long userId
+
     @Column(nullable = false, length = 100)
     String name
+
     @Column(nullable = false, unique = true, length = 100)
     String email
+
     @Column(nullable = false, length = 255, name = "password_hash")
     String passwordHash
+
+    @Column(name = "birth_date", nullable = false)
+    LocalDateTime birthDate
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "user_type")
     UserType userType
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<OrderTable> orders = []
+
     enum UserType {
         ADMIN, STAFF, WAITER, CUSTOMER
     }

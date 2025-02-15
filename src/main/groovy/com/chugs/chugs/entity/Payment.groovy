@@ -22,8 +22,8 @@ class Payment {
     @JoinColumn(name = "ticket_id", nullable = false)
     Ticket ticket
 
-    @Column(nullable = false)
-    LocalDateTime datePayment
+    @Column(nullable = false, name = "payment_date")
+    LocalDateTime paymentDate
 
     enum PaymentMethod {
         CASH, CREDIT_CARD, DEBIT_CARD

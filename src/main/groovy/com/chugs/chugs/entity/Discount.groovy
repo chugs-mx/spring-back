@@ -20,10 +20,10 @@ class Discount {
     @Column(nullable = false)
     BigDecimal amount
 
-    @Column(nullable = false)
+    @Column(name = "start_date", nullable = false)
     LocalDateTime startDate
 
-    @Column(nullable = false)
+    @Column(name = "end_date", nullable = false)
     LocalDateTime endDate
 
     enum DiscountType {
