@@ -4,13 +4,13 @@ CREATE TABLE app_user (
     name          VARCHAR(100) NOT NULL,
     email         VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    birth_date    TIMESTAMP NOT NULL,
     user_type     VARCHAR(20) NOT NULL
 );
 
 -- Create Restaurant Table (Renamed)
 CREATE TABLE restaurant_table (
     table_id     BIGINT AUTO_INCREMENT PRIMARY KEY,
-    table_number SMALLINT UNSIGNED NOT NULL CHECK (table_number BETWEEN 0 AND 255),
     seat_number  SMALLINT UNSIGNED NOT NULL CHECK (seat_number BETWEEN 0 AND 255),
     table_state  VARCHAR(20) NOT NULL
 );
@@ -56,6 +56,7 @@ CREATE TABLE payment (
     ticket_id      BIGINT NOT NULL,
     payment_method VARCHAR(20) NOT NULL,
     amount_paid    DECIMAL(12,2) NOT NULL,
+    payment_date   TIMESTAMP NOT NULL,
     FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id)
 );
 
@@ -106,6 +107,7 @@ CREATE TABLE order_extra_supply (
     order_product_id BIGINT NOT NULL,
     supply_id        BIGINT NOT NULL,
     quantity         DECIMAL(12,2) NOT NULL,
+    unit_measure  VARCHAR(10) NOT NULL,
     PRIMARY KEY (order_product_id, supply_id),
     FOREIGN KEY (order_product_id) REFERENCES order_product(order_product_id),
     FOREIGN KEY (supply_id) REFERENCES inventory(inventory_id)
