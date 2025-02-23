@@ -2,7 +2,6 @@ package com.chugs.chugs.Service
 
 import com.chugs.chugs.entity.Discount
 import com.chugs.chugs.entity.Ticket
-import com.chugs.chugs.repository.DiscountRepository
 import com.chugs.chugs.repository.TicketRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
