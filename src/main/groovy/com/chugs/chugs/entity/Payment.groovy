@@ -18,6 +18,9 @@ class Payment {
     @Column(nullable = false)
     BigDecimal amountPaid
 
+    @Column(nullable = false)
+    BigDecimal tip = BigDecimal.ZERO
+
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
     Ticket ticket
