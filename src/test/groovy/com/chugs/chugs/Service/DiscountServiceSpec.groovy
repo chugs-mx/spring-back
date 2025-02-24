@@ -2,18 +2,14 @@ package com.chugs.chugs.Service
 
 import com.chugs.chugs.entity.Discount
 import com.chugs.chugs.repository.DiscountRepository
-import jakarta.persistence.criteria.CriteriaBuilder
-import jakarta.persistence.criteria.CriteriaQuery
-import jakarta.persistence.criteria.Predicate
-import jakarta.persistence.criteria.Root
-import org.mockito.Mock
-import org.springframework.data.jpa.domain.Specification
-import org.springframework.lang.Nullable
+import spock.lang.*
+import java.time.LocalDate
+
 
 import java.time.LocalDate
 
-class DiscountServiceSpec implements Specification {
-    DiscountRepository discountRepository = Mock()
+class DiscountServiceSpec extends Specification{
+    DiscountRepository discountRepository = Mock(DiscountRepository)
     DiscountService discountService = new DiscountService(discountRepository: discountRepository)
 
     def "getCurrentDiscounts returns discounts valid for today"() {
@@ -27,10 +23,5 @@ class DiscountServiceSpec implements Specification {
 
         then:
         currentDiscounts == discounts
-    }
-
-    @Override
-    Predicate toPredicate(Root root, @Nullable CriteriaQuery query, CriteriaBuilder criteriaBuilder) {
-        return null
     }
 }
