@@ -35,4 +35,25 @@ class DiscountServiceSpec extends Specification{
         currentDiscounts.size() == 1
         currentDiscounts[0].name == "OTRO"
     }
+
+    // Test for obtain discount by name
+    def"testObtainDiscountByName"(){
+        given:
+        String findName = "OTRO"
+
+        List<Discount> discounts = [
+                new Discount(name: "CHUGS"),
+                new Discount(name: "CHUGS"),
+                new Discount(name: "PRUEBA")
+        ]
+
+        discountRepository.findByName(findName) >> Optional.of(discounts.find { it.name == findName })
+
+        when:
+        Discount discount = discountService.getDiscountByName(findName)
+
+        then:
+        discount.name == findName
+
+    }
 }
