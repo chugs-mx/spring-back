@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.stereotype.Service
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class DiscountService {
@@ -14,9 +14,21 @@ class DiscountService {
     DiscountRepository discountRepository
 
     // Obtain discount current
-    List<Discount> getCurrentDiscounts(){
-        LocalDate today = LocalDate.now()
-        return discountRepository.findByStartDateBeforeAndEndDateAfter(today, today)
+    List<Discount> getCurrentDiscounts(LocalDateTime today){
+        List<Discount> allDiscounts = discountRepository.findByStartDateBeforeAndEndDateAfter(today, today)
+
+        //Filter discounts with inconsistent dates
+        allDiscounts = allDiscounts.findAll { discount ->
+            // If the discount has inconsistent dates, we do not include it
+            !discount.startDate.isAfter(discount.endDate)
+        }
+
+        // Add only discounts that are active for the today date
+        allDiscounts = allDiscounts.findAll { discount ->
+            discount.startDate.isBefore(today) && discount.endDate.isAfter(today)
+        }
+
+        return allDiscounts
     }
 
     // Obtain discount by name
