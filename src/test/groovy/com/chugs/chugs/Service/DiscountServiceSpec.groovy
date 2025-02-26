@@ -61,8 +61,9 @@ class DiscountServiceSpec extends Specification{
         given:
         Discount discount = new Discount(
                 name: "CHUGS",
+                discountType: Discount.DiscountType.FIXED,
                 amount: new BigDecimal("10.00"),
-                startDate: LocalDateTime.of(2025, 2, 15, 1, 0),
+                startDate: LocalDateTime.of(2025, 2, 35, 1, 0),
                 endDate: LocalDateTime.of(2025, 3, 25, 3,0)
         )
 
