@@ -3,25 +3,36 @@ package com.chugs.chugs.Service
 import com.chugs.chugs.entity.Discount
 import com.chugs.chugs.repository.DiscountRepository
 import spock.lang.*
-import java.time.LocalDate
-
-
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 class DiscountServiceSpec extends Specification{
-    DiscountRepository discountRepository = Mock(DiscountRepository)
+    DiscountRepository discountRepository = Mock()
     DiscountService discountService = new DiscountService(discountRepository: discountRepository)
 
-    def "getCurrentDiscounts returns discounts valid for today"() {
+    def "Test obtain discount current"(){
         given:
-        LocalDate today = LocalDate.now()
-        List<Discount> discounts = [ new Discount(name: "CHUGS", startDate: today.minusDays(1), endDate: today.plusDays(2))]
-        discountRepository.findByStartDateBeforeAndEndDateAfter(today, today) >> discounts
+        LocalDateTime today = LocalDateTime.of(2027, 2, 25, 12, 0)
+        println "today: ${today}"
 
+        // Discounts test
+        List<Discount> discounts =[
+                new Discount(name: "CHUGS", startDate: LocalDateTime.of(2025, 3, 25, 12, 0), endDate: LocalDateTime.of(2025, 4, 25, 12, 0)),
+                new Discount(name: "OTRO", startDate: LocalDateTime.of(2025, 1, 1, 13, 0), endDate: LocalDateTime.of(2025, 4, 2, 12, 0)),
+                new Discount(name: "DESC", startDate: LocalDateTime.of(2024, 12, 3, 5, 0), endDate: LocalDateTime.of(2024, 12, 4, 5,0))
+        ]
+
+        println "startDay: ${discounts[0].startDate}"
+        println "endDay: ${discounts[0].endDate}"
+
+        discountRepository.findByStartDateBeforeAndEndDateAfter(today, today) >> {
+            println "Mocking repository call"
+            return discounts
+        }
         when:
-        List<Discount> currentDiscounts = discountService.getCurrentDiscounts()
+        List<Discount> currentDiscounts = discountService.getCurrentDiscounts(today)
 
         then:
-        currentDiscounts == discounts
+        currentDiscounts.size() == 1
+        currentDiscounts[0].name == "OTRO"
     }
 }
