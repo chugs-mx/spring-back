@@ -11,7 +11,7 @@ class DiscountServiceSpec extends Specification{
 
     def "Test obtain discount current"(){
         given:
-        LocalDateTime today = LocalDateTime.of(2027, 2, 25, 12, 0)
+        LocalDateTime today = LocalDateTime.of(2025, 2, 25, 12, 0)
         println "today: ${today}"
 
         // Discounts test
