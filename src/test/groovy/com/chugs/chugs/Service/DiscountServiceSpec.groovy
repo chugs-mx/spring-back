@@ -39,7 +39,7 @@ class DiscountServiceSpec extends Specification{
     // Test for obtain discount by name
     def"testObtainDiscountByName"(){
         given:
-        String findName = "OTRO"
+        String findName = "CHUGS"
 
         List<Discount> discounts = [
                 new Discount(name: "CHUGS"),
