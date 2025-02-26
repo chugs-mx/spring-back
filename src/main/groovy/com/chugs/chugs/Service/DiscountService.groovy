@@ -42,6 +42,26 @@ class DiscountService {
 
     // Create or update discount
     Discount saveDiscount(Discount discount){
+        if(discount.getName() == null || discount.getName().trim().isEmpty() ){
+            throw new IllegalArgumentException("Discount name cannot be null or empty")
+        }
+        if( discount.getDiscountType() == null ){
+            throw new IllegalArgumentException("Discount name cannot be null or empty")
+        }
+        if( discount.getAmount() == null || discount.getAmount().compareTo(BigDecimal.ZERO ) <= 0 ){
+            throw new IllegalArgumentException("Discount amount must be greater than zero")
+        }
+        if( discount.getStartDate() == null ){
+            throw new IllegalArgumentException("Start date cannot be null")
+        }
+        if( discount.getEndDate() == null ){
+            throw new IllegalArgumentException("End date cannot be null")
+        }
+
+        if (discount.getStartDate().isAfter(discount.getEndDate())) {
+            throw new IllegalArgumentException("Start date cannot be after end date")
+        }
+
         return discountRepository.save(discount)
     }
 

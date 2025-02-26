@@ -54,6 +54,24 @@ class DiscountServiceSpec extends Specification{
 
         then:
         discount.name == findName
-
     }
+
+    // Test for saveDiscount
+    def"testSaveDiscount"(){
+        given:
+        Discount discount = new Discount(
+                name: "CHUGS",
+                amount: new BigDecimal("10.00"),
+                startDate: LocalDateTime.of(2025, 2, 15, 1, 0),
+                endDate: LocalDateTime.of(2025, 3, 25, 3,0)
+        )
+
+        when:
+        discountService.saveDiscount(discount)
+
+        then:
+        1 * discountRepository.save(discount)
+    }
+
+
 }
