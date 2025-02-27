@@ -97,7 +97,7 @@ class DiscountServiceSpec extends Specification{
         discountService.deleteDiscount(discountId)
 
         then:
-        discounts.size() == 2
+        discounts.size() == 1
         !discounts.find { it.discountId == discountId }
     }
 
