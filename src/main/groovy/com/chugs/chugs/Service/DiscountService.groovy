@@ -48,7 +48,7 @@ class DiscountService {
         if( discount.getDiscountType() == null ){
             throw new IllegalArgumentException("Discount name cannot be null or empty")
         }
-        if( discount.getAmount() == null || discount.getAmount().compareTo(BigDecimal.ZERO ) <= 0 ){
+        if( discount.getAmount() == null || discount.getAmount() <= BigDecimal.ZERO ){
             throw new IllegalArgumentException("Discount amount must be greater than zero")
         }
         if( discount.getStartDate() == null ){
@@ -67,7 +67,9 @@ class DiscountService {
 
     // Delete discount
     void deleteDiscount(Long discountId){
-        if(! discountRepository.existsById(discountId)){
+        def discount = discountRepository.findById(discountId)
+
+        if( discount.isEmpty() ){
             throw new ResourceNotFoundException("Discount not found")
         }
         discountRepository.deleteById(discountId)

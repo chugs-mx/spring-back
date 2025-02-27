@@ -74,5 +74,33 @@ class DiscountServiceSpec extends Specification{
         1 * discountRepository.save(discount)
     }
 
+    // Test for delete discount
+    def"deleteDiscount"(){
+        given:
+        Long discountId = 2222
+
+        List<Discount> discounts = [
+                new Discount(discountId: 2222, name: "CHUGS"),
+                new Discount(discountId: 2222, name: "PRUEBA"),
+                new Discount(discountId: 4444, name: "OTRO")
+        ]
+
+        println "DiscountID: ${discounts[0].discountId}"
+
+        discountRepository.findById(discountId) >> Optional.of(discounts.find { it.discountId == discountId })
+
+        discountRepository.deleteById(discountId) >> {
+            discounts.removeIf { it.discountId == discountId }
+        }
+
+        when:
+        discountService.deleteDiscount(discountId)
+
+        then:
+        discounts.size() == 2
+        !discounts.find { it.discountId == discountId }
+    }
+
+
 
 }
