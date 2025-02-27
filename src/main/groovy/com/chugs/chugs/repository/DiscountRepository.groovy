@@ -13,7 +13,4 @@ interface DiscountRepository extends JpaRepository<Discount,Long>{
 
     // Find discount by name
     Optional<Discount> findByName(String name)
-
-    // Check if there is a discount by id
-    boolean existsById(Long discountId)
 }
