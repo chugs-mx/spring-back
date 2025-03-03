@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository
 interface PaymentRepository extends JpaRepository<Payment,Long>{
     // Find payment by ticket
     List<Payment> findByTicket(Ticket ticket)
-
 }
