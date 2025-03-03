@@ -21,21 +21,83 @@ class PaymentService {
     @Autowired
     TicketRepository ticketRepository
 
-    /**
-     * Register a single payment
-     *  - The tip is calculated on the ticket subtotal
-     *  - The tip is stored in the tip field of the ticket and the total is updated
-     */
     @Transactional
-    Payment registerSinglePaymentWithTip(Long ticketId, Payment.PaymentMethod paymentMethod, BigDecimal amountPaid, BigDecimal tipPercentage ){
-        Ticket ticket = ticketRepository.findById(ticketId) as Ticket
+    void processPayments(Long ticketId, List<Payment> payments) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found."))
+        System.out.println("Ticket found: " + ticket.getTicketId())
 
-        if(! ticketRepository.existsById(ticketId)){
-            throw new ResourceNotFoundException("Ticket not found")
+        BigDecimal totalPaid = BigDecimal.ZERO
+        BigDecimal totalTips = BigDecimal.ZERO
+
+        for (Payment payment : payments) {
+            // Validate each payment
+            if (payment.getPaymentMethod() == null) {
+                throw new IllegalArgumentException("The payment method is required.")
+            }
+            if (payment.getAmountPaid() == null || payment.getAmountPaid() <= BigDecimal.ZERO) {
+                throw new IllegalArgumentException("The amount paid must be greater than zero.")
+            }
+            if (payment.getTip() != null && payment.getTip().compareTo(BigDecimal.ZERO) < 0) {
+                throw new IllegalArgumentException("The tip cannot be negative.")
+            }
+
+            // Calculate tip
+            BigDecimal tipAmount = payment.getTip()
+            totalTips = totalTips.add(tipAmount)
+            totalPaid = totalPaid.add(payment.getAmountPaid())
+
+            // Save payments
+            payment.setTicket(ticket)
+            payment.setPaymentDate(LocalDateTime.now())
+            paymentRepository.save(payment)
+        }
+
+        // Save ticket
+        ticket.setTip(totalTips)
+        ticket.setTotal(ticket.getSubtotal().add(totalTips))
+        ticketRepository.save(ticket)
+
+        // Validate if payment covers the ticket
+        BigDecimal totalRegisteredPaid = paymentRepository.findByTicket(ticket).stream()
+                .map(Payment::getAmountPaid)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+
+        if (totalRegisteredPaid.compareTo(ticket.getTotal()) >= 0) {
+            updateTicketStatusToPaid(ticketId)
+        }
+    }
+
+    void updateTicketStatusToPaid(Long ticketId){
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("Ticket not found."))
+        ticket.setTicketStatus(Ticket.TicketStatus.PAID)
+        ticketRepository.save(ticket)
+
+        println "Ticket " + ticketId + " is now PAID."
+    }
+
+
+
+ /**
+    @Transactional
+    void addOnlyPayment(Long ticketId, Payment payment, BigDecimal tipPercentage ) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow { new ResourceNotFoundException("Ticket not found.") }
+        println "Ticket found: ${ticket.getTicketId()}"
+
+        // Validate PaymentMethod
+        if (payment.paymentMethod == null) {
+            throw new IllegalArgumentException("The payment is required.")
+        }
+
+        // Validate AmountPaid
+        if (payment.amountPaid == null || payment.amountPaid <= BigDecimal.ZERO) {
+            throw new IllegalArgumentException("The amount paid must be greater than zero.")
         }
 
         // Calculate tip on subtotal
-        BigDecimal tipAmount = ticket.getSubtotal().multiply(tipPercentage).divide(BigDecimal.valueOf(100))
+        BigDecimal tipAmount = ticket.getSubtotal() * (tipPercentage).divide(BigDecimal.valueOf(100))
 
         // Assign tip to ticket and update total
         ticket.setTip(tipAmount)
@@ -43,43 +105,52 @@ class PaymentService {
         ticketRepository.save(ticket)
 
         // Register payment
-        Payment payment = new Payment()
-        payment.setPaymentMethod(paymentMethod)
-        payment.setAmountPaid(amountPaid)
-        payment.setTip(BigDecimal.ZERO)
         payment.setTicket(ticket)
-        payment.setPaymentDate(LocalDate.now() as LocalDateTime)
+        payment.setPaymentDate(LocalDateTime.now() as LocalDateTime)
 
-        return paymentRepository.save(payment)
+        println "Payment before save: " + String.valueOf(payment)
+        paymentRepository.save(payment)
+
+        // Validate if payment covers the ticket
+        if (paymentRepository.findByTicket(ticket).stream()
+                .map(Payment::getAmountPaid)
+                .reduce(BigDecimal.ZERO, BigDecimal::add) >= ticket.getTotal()) {
+            updateTicketStatusToPaid(ticketId);
+        }
     }
 
-    /**
-     *  Register various payments
-     *   - Each payment can have its own tip
-     */
     @Transactional
-    List<Payment> divideBillWithIndividualTips(Long ticketId, List<Payment> payments){
+    void splitPayment(Long ticketId, List<Payment> payments){
         Ticket ticket = ticketRepository.findById(ticketId)
-        if(! ticketRepository.existsById(ticketId)){
-            throw new ResourceNotFoundException("Ticket not found")
+                .orElseThrow { new ResourceNotFoundException("Ticket not found.") }
+        println "Ticket found: ${ticket.getTicketId()}"
+
+        BigDecimal totalAmount = ticket.getTotal()
+        BigDecimal totalPaid = BigDecimal.ZERO
+        BigDecimal totalTips = BigDecimal.ZERO
+
+        // Validate each payment
+        for(Payment payment: payments){
+            if(payment.getAmountPaid() <= BigDecimal.ZERO){
+                throw new IllegalArgumentException(("The amount paid must be greater than zero."))
+            }
+            if(payment.getTip() < BigDecimal.ZERO){
+                throw new IllegalArgumentException("The tip cannot be negative.")
+            }
+
+            totalPaid = totalPaid.add(payment.getAmountPaid())
+            totalTips = totalTips.add(payment.getTip())
+
+            payment.setTicket(ticket)
+            payment.setPaymentDate(LocalDateTime.now())
+
+            paymentRepository.save(payment)
         }
 
-        ticket.setTip(BigDecimal.ZERO)
-        ticketRepository.save(ticket)
-
-        // Sum of amount and tip on each payment
-        BigDecimal totalPaid = payments.sum { it.amountPaid + it.tipAmount } as BigDecimal
-
-        if (totalPaid > ticket.total) {
-            throw new IllegalArgumentException("El total de los pagos no puede ser mayor que el total del ticket.")
+        // Validate if payments covers the ticket
+        if (totalPaid != totalAmount) {
+            throw new IllegalArgumentException("The sum of payments does not match the total ticket.")
         }
-
-        // Save each payment
-        payments.each {
-            it.ticket = ticket
-            it.paymentDate = LocalDateTime.now()
-            paymentRepository.save(it)
-        }
-        return payments
-    }
+        updateTicketStatusToPaid(ticketId)
+    } */
 }
