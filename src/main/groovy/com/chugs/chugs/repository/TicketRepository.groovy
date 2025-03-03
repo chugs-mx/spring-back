@@ -17,5 +17,4 @@ interface TicketRepository extends JpaRepository<Ticket,Long>{
 
     // Obtain tickets with specific discount
     List<Ticket> findByDiscountDiscountId(Long discountId)
-
 }
