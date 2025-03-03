@@ -31,6 +31,7 @@ class PaymentService {
         BigDecimal totalTips = BigDecimal.ZERO
 
         for (Payment payment : payments) {
+            println "Processing payment: " + payment
             // Validate each payment
             if (payment.getPaymentMethod() == null) {
                 throw new IllegalArgumentException("The payment method is required.")
@@ -42,10 +43,17 @@ class PaymentService {
                 throw new IllegalArgumentException("The tip cannot be negative.")
             }
 
+            println "Processing payment: " + payment
+            println "Total Paid: " + totalPaid
+            println "Total Tips: " + totalTips
             // Calculate tip
             BigDecimal tipAmount = payment.getTip()
             totalTips = totalTips.add(tipAmount)
             totalPaid = totalPaid.add(payment.getAmountPaid())
+
+            println "Despues de sumar"
+            println "Total Paid: " + totalPaid
+            println "Total Tips: " + totalTips
 
             // Save payments
             payment.setTicket(ticket)
@@ -53,15 +61,20 @@ class PaymentService {
             paymentRepository.save(payment)
         }
 
+        println "Ticket subtotal:" + ticket.getSubtotal()
+
         // Save ticket
         ticket.setTip(totalTips)
-        ticket.setTotal(ticket.getSubtotal().add(totalTips))
+        ticket.setTotal(ticket.getSubtotal())
         ticketRepository.save(ticket)
+        println "Ticket total: " + ticket.getTotal()
+
 
         // Validate if payment covers the ticket
         BigDecimal totalRegisteredPaid = paymentRepository.findByTicket(ticket).stream()
                 .map(Payment::getAmountPaid)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
+        println "Total registered paid: " +totalRegisteredPaid
 
         if (totalRegisteredPaid.compareTo(ticket.getTotal()) >= 0) {
             updateTicketStatusToPaid(ticketId)
