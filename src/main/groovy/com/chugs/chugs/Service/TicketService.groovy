@@ -34,17 +34,18 @@ class TicketService {
 
         BigDecimal subtotal = order.getTotal()
         BigDecimal total = subtotal
-        Optional discount = null
+        Discount discount = null
 
         // Appply discount
         if( discountId != null ){
-            discount = discountRepository.findById(discountId)
+            discount = discountRepository.findById(discountId).orElse(null)
             if(!discount){
                 throw new ResourceNotFoundException("Discount not found.")
             }
 
+            println("Discount Type: " + discount.getDiscountType())
             BigDecimal discountAmount = calculateDiscount(subtotal, discount)
-            (total = subtotal.subtract(discountAmount))
+            total = subtotal.subtract(discountAmount)
         }
 
         // Save ticket
@@ -68,9 +69,9 @@ class TicketService {
             return BigDecimal.ZERO
         }
 
-        if( discount.getDiscountType().equals('PERCENTAGE')){
+        if(discount.getDiscountType() == Discount.DiscountType.PERCENTAGE){
             return subtotal.multiply(discount.getAmount().divide(BigDecimal.valueOf(100)))
-        }else if( discount.getDiscountType().equals('FIXED')){
+        }else if(discount.getDiscountType() == Discount.DiscountType.FIXED){
             return discount.getAmount()
         }else{
             throw new IllegalArgumentException("Invalid discount type.")
