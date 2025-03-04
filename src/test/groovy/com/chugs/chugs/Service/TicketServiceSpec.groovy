@@ -6,6 +6,7 @@ import com.chugs.chugs.entity.Ticket
 import com.chugs.chugs.repository.DiscountRepository
 import com.chugs.chugs.repository.OrderTableRepository
 import com.chugs.chugs.repository.TicketRepository
+import org.junit.jupiter.api.Order
 import spock.lang.Specification
 
 class TicketServiceSpec extends Specification{
@@ -38,7 +39,6 @@ class TicketServiceSpec extends Specification{
     def"testCreateTicketApplyDiscount"(){
         given:
         Long discountId = 1L
-        Long ticketId = 2L
         OrderTable orderTable = new OrderTable(orderId: 1L, total: BigDecimal.valueOf(100))
         Discount discount = new Discount(discountId: discountId, name: "CHUGS", amount: BigDecimal.valueOf(10), discountType: Discount.DiscountType.PERCENTAGE)
 
@@ -56,6 +56,29 @@ class TicketServiceSpec extends Specification{
         ticket.getSubtotal() == BigDecimal.valueOf(100)
         ticket.getTotal() == BigDecimal.valueOf(90)
         ticket.discount == discount
+        ticket.ticketStatus == Ticket.TicketStatus.PENDING
+
+    }
+
+    def"testCreateTicketApplyFixed"(){
+        given:
+        Long discountId = 33L
+        OrderTable orderTable = new OrderTable(orderId: 22L, total: BigDecimal.valueOf(200))
+        Discount discount = new Discount(discountId: discountId, name: "CHUUGS", amount: BigDecimal.valueOf(2), discountType: Discount.DiscountType.FIXED)
+
+        orderTableRepository.findById(orderTable.orderId) >> Optional.of(orderTable)
+        ticketRepository.save(_) >> {Ticket ticket ->
+            ticket.ticketId == 1L
+            return ticket
+        }
+        discountRepository.findById(discountId) >> Optional.of(discount)
+
+        when:
+        Ticket ticket = ticketService.createTicket(orderTable.orderId, discountId)
+
+        then:
+        ticket.subtotal == BigDecimal.valueOf(200)
+        ticket.total == BigDecimal.valueOf(198)
         ticket.ticketStatus == Ticket.TicketStatus.PENDING
 
     }
