@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
 @Repository
-interface TicketRepository extends JpaRepository<Ticket,Long>{
+interface TicketRepository extends JpaRepository<Ticket, Long>{
     // Obtain all tickets by status
     List<Ticket> findByTicketStatus(String status)
 
