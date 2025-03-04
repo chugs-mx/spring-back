@@ -17,7 +17,7 @@ class Ticket {
     @Column(nullable = false)
     BigDecimal total
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     BigDecimal tip = BigDecimal.ZERO
 
     @Column(name = "order_date", nullable = false)
