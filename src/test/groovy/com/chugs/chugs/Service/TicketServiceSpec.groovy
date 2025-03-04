@@ -6,7 +6,7 @@ import com.chugs.chugs.entity.Ticket
 import com.chugs.chugs.repository.DiscountRepository
 import com.chugs.chugs.repository.OrderTableRepository
 import com.chugs.chugs.repository.TicketRepository
-import org.junit.jupiter.api.Order
+import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import spock.lang.Specification
 
 class TicketServiceSpec extends Specification{
@@ -80,6 +80,31 @@ class TicketServiceSpec extends Specification{
         ticket.subtotal == BigDecimal.valueOf(200)
         ticket.total == BigDecimal.valueOf(198)
         ticket.ticketStatus == Ticket.TicketStatus.PENDING
+    }
 
+    def"testExpectAnExceptionWhenOrderIsNotFound"(){
+        given:
+        Long orderId = 9L
+
+        orderTableRepository.findById(orderId) >> Optional.empty()
+
+        when:
+        Ticket ticket = ticketService.createTicket(orderId, null)
+
+        then:
+        thrown(ResourceNotFoundException)
+    }
+
+    def"testExpectAnExceptionWhenDiscountIsNotFound"(){
+        given:
+        Long discountId = 9L
+
+        discountRepository.findById(discountId) >> Optional.empty()
+
+        when:
+        Ticket ticket = ticketService.createTicket(null, discountId)
+
+        then:
+        thrown(NullPointerException)
     }
 }
