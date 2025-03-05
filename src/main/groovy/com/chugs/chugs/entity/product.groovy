@@ -17,4 +17,12 @@ class Product {
 
     @Column(nullable = false)
     BigDecimal price
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    Category product_category
+
+    enum Category{
+        HAMBURGERS, DRINKS
+    }
 }
