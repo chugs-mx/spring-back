@@ -106,5 +106,6 @@ gradle-app.setting
 *.hprof
 
 .env
+/Users/rosasainz/Documents/Chugs/spring-back/src/main/groovy/com/chugs/chugs/ChugsApplication.groovy
 # End of https://www.toptal.com/developers/gitignore/api/asdf,java,gradle,macos,linux
 
