@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/groovy,gradle,linux,macos,java,asdf
-# Edit at https://www.toptal.com/developers/gitignore?templates=groovy,gradle,linux,macos,java,asdf
+reated by https://www.toptal.com/developers/gitignore/api/asdf,java,gradle,macos,linux
+# Edit at https://www.toptal.com/developers/gitignore?templates=asdf,java,gradle,macos,linux
 
 ### asdf ###
 /.tool-versions
@@ -32,6 +32,7 @@ bin/
 
 ### Java ###
 # Compiled class file
+*.class
 
 # Log file
 *.log
@@ -56,6 +57,7 @@ hs_err_pid*
 replay_pid*
 
 ### Linux ###
+*~
 
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
@@ -76,7 +78,8 @@ replay_pid*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -120,7 +123,9 @@ gradle-app.setting
 
 # Eclipse Gradle plugin generated files
 # Eclipse Core
+.project
 # JDT-specific (Eclipse Java Development Tools)
+.classpath
 
 ### Gradle Patch ###
 # Java heap dump
