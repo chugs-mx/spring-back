@@ -47,10 +47,13 @@ class InventoryServiceSpec extends Specification {
         given:
             Inventory inventory = new Inventory(
                     name: "Vegan hamburger",
+                    inventoryCategory: missingCategory,
+                    subcategory: missingSubcategory,
                     description: "For hamburgers",
                     entryDate: LocalDateTime.now(),
                     expiryDate: LocalDateTime.now().plusMonths(1),
                     unitPrice: BigDecimal.valueOf(10.5),
+                    unitMeasure: missingUnitMeasure,
                     quantity: BigDecimal.valueOf(5)
             )
         when: "the inventory is saved"
@@ -70,7 +73,7 @@ class InventoryServiceSpec extends Specification {
     def "testInventoryNameNull"() {
         given: "inventory with name null"
         Inventory inventory = new Inventory(
-                name: null,
+                name: invalidName,
                 inventoryCategory: Inventory.InventoryCategory.REFRIGERATED,
                 subcategory: Inventory.Subcategory.VEGETABLES,
                 description: "Fresh product",
@@ -91,4 +94,34 @@ class InventoryServiceSpec extends Specification {
         where:
         invalidName << [null, "A".repeat(101)]
     }
+
+    def "testShouldThrowErrorForInvalidPriceOrQuantity"() {
+        given: "an inventory with invalid values"
+        Inventory inventory = new Inventory(
+                name: "Tomato",
+                inventoryCategory: Inventory.InventoryCategory.REFRIGERATED,
+                subcategory: Inventory.Subcategory.VEGETABLES,
+                description: "Fresh tomatoes",
+                entryDate: LocalDateTime.now(),
+                expiryDate: LocalDateTime.now().plusMonths(1),
+                unitMeasure: Inventory.UnitMeasure.KG,
+                unitPrice: invalidPrice,
+                quantity: invalidQuantity
+        )
+
+        when: "trying to save the inventory"
+        inventoryService.addToInventory(inventory)
+
+        then: "an exception should be thrown"
+        def e = thrown(IllegalArgumentException)
+        assert e.message in ["Unit price must be greater than zero.", "Quantity must be zero."]
+
+        where:
+        invalidPrice            | invalidQuantity
+        BigDecimal.valueOf(-5.0) | BigDecimal.valueOf(10)
+        BigDecimal.valueOf(5.0)  | BigDecimal.valueOf(-2)
+    }
+
+
+
 }
