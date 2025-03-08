@@ -38,7 +38,11 @@ class InventoryService {
             throw new IllegalArgumentException("Quantity must be zero.")
         }
 
-        return inventoryRepository.save(inventory)
+        println("Inventory detalles: $inventory")
+        def inventorySave = inventoryRepository.save(inventory)
+
+        println("Inventory save: " +inventorySave.inventoryId)
+        return inventorySave
     }
 
     List<Inventory> inventoriesByCategory(Inventory.InventoryCategory category){
@@ -47,6 +51,5 @@ class InventoryService {
         }
         return inventoryRepository.findByInventoryCategory(category)
     }
-
 
 }
