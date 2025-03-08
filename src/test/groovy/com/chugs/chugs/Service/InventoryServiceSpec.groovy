@@ -1,7 +1,6 @@
 package com.chugs.chugs.Service
 
 import com.chugs.chugs.entity.Inventory
-import com.chugs.chugs.entity.Ticket
 import com.chugs.chugs.repository.InventoryRepository
 import spock.lang.Specification
 
@@ -145,7 +144,4 @@ class InventoryServiceSpec extends Specification {
         def e = thrown(IllegalArgumentException)
         e.message == "Category is null."
     }
-
-
-
 }
