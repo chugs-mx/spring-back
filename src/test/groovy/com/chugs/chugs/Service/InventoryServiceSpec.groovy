@@ -66,4 +66,29 @@ class InventoryServiceSpec extends Specification {
         Inventory.InventoryCategory.REFRIGERATED | null | Inventory.UnitMeasure.KG
         Inventory.InventoryCategory.REFRIGERATED | Inventory.Subcategory.VEGETABLES | null
     }
+
+    def "testInventoryNameNull"() {
+        given: "inventory with name null"
+        Inventory inventory = new Inventory(
+                name: null,
+                inventoryCategory: Inventory.InventoryCategory.REFRIGERATED,
+                subcategory: Inventory.Subcategory.VEGETABLES,
+                description: "Fresh product",
+                entryDate: LocalDateTime.now(),
+                expiryDate: LocalDateTime.now().plusMonths(1),
+                unitMeasure: Inventory.UnitMeasure.KG,
+                unitPrice: BigDecimal.valueOf(5.0),
+                quantity: BigDecimal.valueOf(10)
+        )
+
+        when: "the inventory is saved"
+        inventoryService.addToInventory(inventory)
+
+        then: "an exception should be thrown"
+        def e = thrown(IllegalArgumentException)
+        e.message == "Inventory name is required and must be at most 100 characters."
+
+        where:
+        invalidName << [null, "A".repeat(101)]
+    }
 }
