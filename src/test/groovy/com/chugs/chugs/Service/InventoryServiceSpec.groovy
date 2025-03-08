@@ -122,6 +122,30 @@ class InventoryServiceSpec extends Specification {
         BigDecimal.valueOf(5.0)  | BigDecimal.valueOf(-2)
     }
 
+    def "testInventoriesByCategory"() {
+        given: "a list of inventories in the same category"
+        Inventory inventory1 = new Inventory(name: "Milk", inventoryCategory: Inventory.InventoryCategory.REFRIGERATED)
+        Inventory inventory2 = new Inventory(name: "Cheese", inventoryCategory: Inventory.InventoryCategory.REFRIGERATED)
+
+        inventoryRepository.findByInventoryCategory(Inventory.InventoryCategory.REFRIGERATED) >> [inventory1, inventory2]
+
+        when:
+        List<Inventory> results = inventoryService.inventoriesByCategory(Inventory.InventoryCategory.REFRIGERATED)
+
+        then: "it should return the correct items"
+        results.size() == 2
+        results.every { it.inventoryCategory == Inventory.InventoryCategory.REFRIGERATED }
+    }
+
+    def "testInventoriesWithNullCategory"() {
+        when: "calling inventoriesByCategory with null"
+        inventoryService.inventoriesByCategory(null)
+
+        then: "an exception should be thrown"
+        def e = thrown(IllegalArgumentException)
+        e.message == "Category is null."
+    }
+
 
 
 }
