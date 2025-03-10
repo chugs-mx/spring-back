@@ -41,11 +41,11 @@ class ProductInventoryService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ResourceNotFoundException("Product not found."))
 
-        return productInventoryRepository.findByProduct(product)
+        return productInventoryRepository.findByProductId(product)
     }
 
     ProductInventory updateIngredientQuantity(Long productId, Long inventoryId, BigDecimal quantity){
-        ProductInventory productInventory = productInventoryRepository.findByProductAndInventory(
+        ProductInventory productInventory = productInventoryRepository.findByProductIdAndInventory(
                 productRepository.findById(productId).orElseThrow(),
                 inventoryRepository.findById(inventoryId).orElseThrow()
         ).orElseThrow( () -> new RuntimeException("Not found."))
@@ -57,7 +57,7 @@ class ProductInventoryService {
     }
 
     void removeIngredientFromProduct(Long productId, Long inventoryId){
-        ProductInventory productInventory = productInventoryRepository.findByProductAndInventory(
+        ProductInventory productInventory = productInventoryRepository.findByProductIdAndInventory(
                 productRepository.findById(productId).orElseThrow(),
                 inventoryRepository.findById(inventoryId).orElseThrow()
         ).orElseThrow( () -> new RuntimeException("Not found."))

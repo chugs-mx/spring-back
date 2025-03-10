@@ -89,13 +89,13 @@ class ProductInventoryServiceSpec extends Specification{
 
         productRepository.findById(productId) >> Optional.of(product)
         inventoryRepository.findById(inventoryId) >> Optional.of(inventory)
-        productInventoryRepository.findByProductAndInventory(product, inventory) >> Optional.of(productInventory)
+        productInventoryRepository.findByProductIdAndInventory(product, inventory) >> Optional.of(productInventory)
         productInventoryRepository.save(_) >> { ProductInventory p -> p }
 
         when: "updating the quantity of an ingredient"
         println "Product: " + product
         println "Inventory: " + inventory
-        println "ProductInventory found: " + productInventoryRepository.findByProductAndInventory(product, inventory)
+        println "ProductInventory found: " + productInventoryRepository.findByProductIdAndInventory(product, inventory)
 
         ProductInventory updatedInventory = productInventoryService.updateIngredientQuantity(productId, inventoryId, newQuantity)
 
@@ -117,7 +117,7 @@ class ProductInventoryServiceSpec extends Specification{
 
         productRepository.findById(productId) >> Optional.of(product)
         inventoryRepository.findById(inventoryId) >> Optional.of(inventory)
-        productInventoryRepository.findByProductAndInventory(product, inventory) >> Optional.of(productInventory)
+        productInventoryRepository.findByProductIdAndInventory(product, inventory) >> Optional.of(productInventory)
 
         when:
         productInventoryService.removeIngredientFromProduct(productId, inventoryId)
