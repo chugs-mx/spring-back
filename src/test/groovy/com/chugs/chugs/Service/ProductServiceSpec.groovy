@@ -98,7 +98,7 @@ class ProductServiceSpec extends Specification{
                 new Product(productId: 2L, name: "Cheese Burger", description: "Burger", productCategory: category, price: BigDecimal.valueOf(30))
         ]
 
-        productRepository.findByProductIdCategory(category) >> hamburgers
+        productRepository.findByProductCategory(category) >> hamburgers
 
         when:
        List<Product> productsByCategory = productService.getProductsByCategory(category)

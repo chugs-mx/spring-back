@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ProductInventoryRepository extends JpaRepository<ProductInventory, Long>{
     List<ProductInventory> findByProductId(Product product) // to obtain all the ingredients of a product
-    List<ProductInventory> findByInventory(Inventory inventory) // to obtain all products using an input
     Optional<ProductInventory> findByProductIdAndInventory(Product product, Inventory inventory) //relationship between a product and a ingredient
 
 }
