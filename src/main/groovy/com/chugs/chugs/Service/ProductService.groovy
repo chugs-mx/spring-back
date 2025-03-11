@@ -41,7 +41,7 @@ class ProductService {
     }
 
     List<Product> getProductsByCategory(Product.Category category){
-        return productRepository.findByProductIdCategory(category)
+        return productRepository.findByProductCategory(category)
     }
 
     void validateProduct(Product product){
