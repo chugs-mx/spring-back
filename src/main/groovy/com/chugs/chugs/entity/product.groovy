@@ -20,9 +20,9 @@ class Product {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
-    Category product_category
+    Category productCategory
 
     enum Category{
-        HAMBURGERS, DRINKS
+        HAMBURGERS, DRINKS, EXTRA, POTATOES, DESSERTS
     }
 }
