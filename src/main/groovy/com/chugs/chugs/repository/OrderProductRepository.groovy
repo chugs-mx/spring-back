@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface OrderProductRepository extends JpaRepository<OrderProduct, Long>{
-    List<Product> findByOrder(OrderTable order)
+    List<OrderProduct> findByOrder(OrderTable order)
     Optional<OrderProduct> findByOrderAndProduct(OrderTable order, Product product)
 
 }

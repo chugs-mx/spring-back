@@ -62,5 +62,4 @@ class OrderProductService {
         orderProduct.setOrder_status(newStatus)
         return orderProductRepository.save(orderProduct)
     }
-
 }
