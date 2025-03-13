@@ -8,7 +8,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-@Transactional
 class ProductService {
 
     @Autowired
@@ -19,6 +18,7 @@ class ProductService {
         return productRepository.save(product)
     }
 
+    @Transactional
     Product updateProduct(Long productId, Product updateProduct){
         return productRepository.findById(productId).map (product -> {
             validateProduct(updateProduct)
@@ -30,6 +30,7 @@ class ProductService {
         }) .orElseThrow(() -> new ResourceNotFoundException("Product not found."))
     }
 
+    @Transactional
     void deleteProduct(Long productId){
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."))
