@@ -1,13 +1,15 @@
 package com.chugs.chugs
 
-import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import spock.lang.Specification
 
 @SpringBootTest
-class ChugsApplicationTests {
 
-	@Test
+class ChugsApplicationTests extends Specification {
+
 	void contextLoads() {
+		expect: "the application context loads successfully"
+		true
 	}
 
 }
