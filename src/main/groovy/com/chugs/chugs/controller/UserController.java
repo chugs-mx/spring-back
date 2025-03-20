@@ -3,10 +3,7 @@ package com.chugs.chugs.controller;
 import com.chugs.chugs.Service.UserService;
 import com.chugs.chugs.entity.User;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -20,12 +17,11 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public User createUser() {
-        User user = new User();
-        user.setName("Erick");
-        user.setEmail("erickdjm@ellucia.com");
-        user.setPasswordHash("ADHW@&da21273");
-        user.setUserType(User.UserType.ADMIN);
+    public User createUser(@RequestBody User user) {
+        user.setName(user.getName());
+        user.setEmail(user.getEmail());
+        user.setPasswordHash(user.getPasswordHash() );
+        user.setUserType(user.getUserType());
         return userService.createUser(user);
 
         //check if it is not already created
@@ -34,10 +30,6 @@ public class UserController {
         //password handling (hash the password before save it)
 
 
-    }
-
-    public UserService getUserService() {
-        return userService;
     }
 
     private final UserService userService;
