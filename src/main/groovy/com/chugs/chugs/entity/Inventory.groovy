@@ -15,7 +15,11 @@ class Inventory {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    InventoryType inventoryType
+    InventoryCategory inventoryCategory
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    Subcategory subcategory
 
     @Column(nullable = false, length = 500)
     String description
@@ -36,8 +40,12 @@ class Inventory {
     @Column(nullable = false)
     BigDecimal quantity
 
-    enum InventoryType {
-        INGREDIENT, EQUIPMENT, PACKAGING
+    enum InventoryCategory {
+        CLUTTER, REFRIGERATED, CLEANING, DISPOSABLE, FROZEN
+    }
+
+    enum Subcategory{
+        INGREDIENT, PRODUCT_VARIANT, PRODUCT, MEAT, VEGETABLES, DRINKS
     }
 
     enum UnitMeasure {
