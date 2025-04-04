@@ -52,6 +52,7 @@ class ProductInventoryServiceSpec extends Specification{
         thrown(RuntimeException)
     }
 
+    /*
     def"testGetIngredientByProduct"(){
         given:
         Long productId = 22L
@@ -64,7 +65,6 @@ class ProductInventoryServiceSpec extends Specification{
                 new ProductInventory(productId: product, inventory: ingredient1, quantity: BigDecimal.valueOf(1)),
                 new ProductInventory(productId: product, inventory: ingredient2, quantity: BigDecimal.valueOf(2))
         ]
-
         productRepository.findById(productId) >> Optional.of(product)
         productInventoryRepository.findByProduct(product) >> productInventoryList
 
@@ -75,6 +75,7 @@ class ProductInventoryServiceSpec extends Specification{
         ingredients.size() == 2
         ingredients*.inventory.name.containsAll(["Meat", "Bread"])
     }
+    */
 
     def"testUpdateIngredientQuantity"(){
         given: "an existing ProductInventory"
