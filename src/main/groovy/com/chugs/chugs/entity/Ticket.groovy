@@ -2,6 +2,8 @@ package com.chugs.chugs.entity
 
 import jakarta.persistence.*
 
+import java.time.LocalDateTime
+
 @Entity
 @Table(name = "ticket")
 class Ticket {
@@ -15,8 +17,11 @@ class Ticket {
     @Column(nullable = false)
     BigDecimal total
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     BigDecimal tip = BigDecimal.ZERO
+
+    @Column(name = "order_date", nullable = false)
+    LocalDateTime orderDate = LocalDateTime.now()
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
