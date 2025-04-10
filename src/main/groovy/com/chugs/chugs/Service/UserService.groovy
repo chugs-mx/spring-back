@@ -29,7 +29,7 @@ class UserService {
     }
 
     // Find a user by email
-    Optional<User> findUserByEmail(String email) {
+    Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email)
     }
 
@@ -52,5 +52,10 @@ class UserService {
         user.passwordHash = password
         //hashed password already done
         userRepository.save(user)
+    }
+
+    Optional<User> getValidUser(String email, String password){
+        Optional<User> user = userRepository.findByEmail(email)
+        return user
     }
 }

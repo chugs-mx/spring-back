@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
+import java.time.LocalDateTime
+
 @RestController
 class UserController {
 
@@ -25,16 +27,25 @@ class UserController {
     User createUser() {
         User user = new User();
         user.name = "Erick"
-        user.email = "erickdjm@ellucia.com"
-        user.passwordHash = "ADHW@&da21273"
+        user.email = "erick@gmail.com"
+        user.passwordHash = "pass"
         user.userType = User.UserType.ADMIN
+        user.birthDate = LocalDateTime.now()
         userService.createUser(user)
 
         //check if it is not already created
         //required fields
         //format checks
         //password handling (hash the password before save it)
+    }
 
-
+    @GetMapping("/user/valid")
+    User getValidUser(@RequestParam(name = "email") String email, @RequestParam(name = "password") String password) {
+        Optional<User> u =   userService.getValidUser(email, password)
+        if (u.isPresent()) {
+            return u.get()
+        } else {
+            return null
+        }
     }
 }
