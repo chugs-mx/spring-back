@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +23,7 @@ public class SecurityConfig {
                         }
                 ).formLogin(l -> l.defaultSuccessUrl("/"))
                 .logout(l -> l.logoutSuccessUrl("/"))
+                .addFilterBefore(new NextJSFilter(), AuthorizationFilter.class)
                 .build();
     }
 
@@ -39,6 +41,4 @@ public class SecurityConfig {
                         .build()
         );
     }
-
-
 }
