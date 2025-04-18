@@ -1,3 +1,6 @@
+// TODO: implement if necessary the AuthenticationProvider for Nextjs JWT token
+// only if we need to make the request from the client and not from the server.
+// I will keep this file only for reference purposes
 package com.chugs.chugs.config;
 
 import org.springframework.security.authentication.AuthenticationProvider;
