@@ -26,11 +26,8 @@ public class Auth {
             User foundUser = user.get();
             if (foundUser.getPasswordHash().equals(password)) {
                 return ResponseEntity.ok(foundUser);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
