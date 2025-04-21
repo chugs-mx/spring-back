@@ -2,16 +2,22 @@ package com.chugs.chugs.Service
 
 import com.chugs.chugs.repository.UserRepository
 import com.chugs.chugs.entity.User
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class UserService {
     @Autowired
     UserRepository userRepository
+
+    private static final Logger logger = LoggerFactory.getLogger(this.class);
 
     Page<User> findAllUsers(int page, int size) {
 
@@ -23,7 +29,8 @@ class UserService {
     User createUser(User user) {
         //verificar que el correo aun no este dado de alta
         userRepository.findByEmail(user.email).ifPresent {
-            throw new IllegalArgumentException("Email already in use")
+            logger.error("Email already in use: ${user.email}")
+            throw new ResponseStatusException(HttpStatus.CONFLICT , "Email already in use")
         }
         return userRepository.save(user)
     }
