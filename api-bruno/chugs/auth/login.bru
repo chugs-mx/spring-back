@@ -1,0 +1,16 @@
+meta {
+  name: login
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/auth/login?email=erick@gmail.com&password=pass
+  body: none
+  auth: inherit
+}
+
+params:query {
+  email: erick@gmail.com
+  password: pass
+}
