@@ -2,9 +2,14 @@ package com.chugs.chugs.Service
 
 import com.chugs.chugs.entity.Inventory
 import com.chugs.chugs.repository.InventoryRepository
+import com.chugs.chugs.repository.specification.InventorySpecification
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import org.springframework.data.jpa.domain.Specification;
 
 @Service
 class InventoryService {
@@ -52,4 +57,12 @@ class InventoryService {
         return inventoryRepository.findByInventoryCategory(category)
     }
 
+    Page<Inventory> getInventoriesWithPaginationSortingAndFiltering(int page, int size, String search, String sort, boolean asc , String category, String subCategory) {
+
+        Sort sortOrder = sort ?  (asc ? Sort.by(sort).ascending() : Sort.by(sort).descending() ) : Sort.unsorted()
+        PageRequest pageRequest = PageRequest.of(page, size, sortOrder)
+        Specification<Inventory> spec = InventorySpecification.getSpecification(search, category, subCategory)
+        Page<Inventory> inventoryPage = inventoryRepository.findAll(spec, pageRequest)
+        return inventoryPage
+    }
 }
