@@ -1,0 +1,21 @@
+meta {
+  name: create a user
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/user
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Erick De Jesus Molina",
+    "email": "erickdejesusmolina@gmail.com",
+    "password": "erickpass",
+    "birthDate": "2025-04-21T23:48:28.781Z",
+    "userType": "ADMIN"
+  }
+}

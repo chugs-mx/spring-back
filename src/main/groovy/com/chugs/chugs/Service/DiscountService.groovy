@@ -3,8 +3,9 @@ package com.chugs.chugs.Service
 import com.chugs.chugs.entity.Discount
 import com.chugs.chugs.repository.DiscountRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.rest.webmvc.ResourceNotFoundException
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 import java.time.LocalDateTime
 
@@ -35,7 +36,7 @@ class DiscountService {
     Discount getDiscountByName(String name){
         def discount  = discountRepository.findByName(name)
         if(!discount.isPresent()){
-            throw new ResourceNotFoundException("Discount not found")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Discount not found")
         }
         return discount.get()
     }
@@ -70,7 +71,7 @@ class DiscountService {
         def discount = discountRepository.findById(discountId)
 
         if( discount.isEmpty() ){
-            throw new ResourceNotFoundException("Discount not found")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Discount not found")
         }
         discountRepository.deleteById(discountId)
     }

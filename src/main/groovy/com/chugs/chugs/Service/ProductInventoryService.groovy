@@ -7,8 +7,9 @@ import com.chugs.chugs.repository.InventoryRepository
 import com.chugs.chugs.repository.ProductInventoryRepository
 import com.chugs.chugs.repository.ProductRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.rest.webmvc.ResourceNotFoundException
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class ProductInventoryService {
@@ -24,9 +25,9 @@ class ProductInventoryService {
 
     ProductInventory addIngredientToProduct(Long productId, Long inventoryId, BigDecimal quantityUsed){
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Product not found."))
         Inventory inventory = inventoryRepository.findById(inventoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Inventory not found."))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found."))
 
         ProductInventory productInventory = new ProductInventory()
         productInventory.setProductId(product)
@@ -39,7 +40,7 @@ class ProductInventoryService {
 
     List<Inventory> getIngredientsByProduct(Long productId){
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found."))
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found."))
 
         return productInventoryRepository.findByProductId(product)
     }

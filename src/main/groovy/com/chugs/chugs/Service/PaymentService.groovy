@@ -6,8 +6,9 @@ import com.chugs.chugs.repository.PaymentRepository
 import com.chugs.chugs.repository.TicketRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.rest.webmvc.ResourceNotFoundException
+
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -24,7 +25,7 @@ class PaymentService {
     @Transactional
     void processPayments(Long ticketId, List<Payment> payments) {
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found."))
+                .orElseThrow(() -> new ResponseStatusException("Ticket not found."))
         System.out.println("Ticket found: " + ticket.getTicketId())
 
         BigDecimal totalPaid = BigDecimal.ZERO

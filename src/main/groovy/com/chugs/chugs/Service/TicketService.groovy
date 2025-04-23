@@ -8,8 +8,9 @@ import com.chugs.chugs.repository.OrderTableRepository
 import com.chugs.chugs.repository.TicketRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.rest.webmvc.ResourceNotFoundException
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 import java.time.LocalDateTime
 
@@ -28,7 +29,7 @@ class TicketService {
     Ticket createTicket(Long orderId, Long discountId){
         OrderTable order = orderTableRepository.findById(orderId).orElse(null)
         if(!order){
-            throw new ResourceNotFoundException("Order not found.")
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found.")
         }
         println("OrderTable found: "+ order.getOrderId())
 
@@ -40,7 +41,7 @@ class TicketService {
         if( discountId != null ){
             discount = discountRepository.findById(discountId).orElse(null)
             if(!discount){
-                throw new ResourceNotFoundException("Discount not found.")
+                throw new ResponseStatusException("Discount not found.")
             }
 
             println("Discount Type: " + discount.getDiscountType())
@@ -82,7 +83,7 @@ class TicketService {
     Ticket getTicketById(Long ticketId){
         Ticket ticket = ticketRepository.findById(ticketId)
         if( !ticket ) {
-            throw new ResourceNotFoundException("Ticket not found.")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND ,"Ticket not found.")
         }
     }
 }
