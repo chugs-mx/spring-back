@@ -43,3 +43,7 @@ tasks.named('test', Test) {
 		showStackTraces true
 	}
 }
+
+tasks.withType(GroovyCompile).configureEach {
+	options.compilerArgs.add("-parameters")
+}
