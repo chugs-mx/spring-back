@@ -23,7 +23,7 @@ public class InventoryController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("")
     ResponseEntity<PagedModel<Inventory>> getInventories(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
