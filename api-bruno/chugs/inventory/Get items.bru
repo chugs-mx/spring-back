@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{host}}/inventories/
+  url: {{host}}/inventories/?category=refrigerated
   body: none
   auth: inherit
 }
 
 params:query {
-  ~category: refrigerated
+  category: refrigerated
   ~search: le
   ~sort: name
   ~asc: false
