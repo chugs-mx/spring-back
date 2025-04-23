@@ -19,15 +19,13 @@ public class SecurityConfig {
         return http.authorizeHttpRequests(
                         authorizeHttp -> {
                             authorizeHttp.requestMatchers("/").permitAll();
-                            authorizeHttp.requestMatchers("/inventories").permitAll();
                             authorizeHttp.requestMatchers("/auth/login").permitAll();
-//                            authorizeHttp.requestMatchers("/swagger-ui/index.html").permitAll();
-//                            authorizeHttp.requestMatchers("/v3/api-docs/**").permitAll();
                             authorizeHttp.anyRequest().authenticated();
                         }
                 ).formLogin(l -> l.defaultSuccessUrl("/"))
                 .logout(l -> l.logoutSuccessUrl("/"))
                 .addFilterBefore(new NextJSFilter(), AuthorizationFilter.class)
+                .addFilterBefore(new BearerTokenAuthFilter(), AuthorizationFilter.class)
                 .build();
     }
 
