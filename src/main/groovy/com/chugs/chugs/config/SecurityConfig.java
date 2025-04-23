@@ -22,10 +22,12 @@ public class SecurityConfig {
                             authorizeHttp.requestMatchers("/auth/login").permitAll();
                             authorizeHttp.anyRequest().authenticated();
                         }
-                ).formLogin(l -> l.defaultSuccessUrl("/"))
-                .logout(l -> l.logoutSuccessUrl("/"))
-                .addFilterBefore(new NextJSFilter(), AuthorizationFilter.class)
+                )
                 .addFilterBefore(new BearerTokenAuthFilter(), AuthorizationFilter.class)
+                .addFilterBefore(new NextJSFilter(), AuthorizationFilter.class)
+                .formLogin(l -> l.defaultSuccessUrl("/"))
+                .logout(l -> l.logoutSuccessUrl("/"))
+                .csrf((csrf) -> csrf.disable())
                 .build();
     }
 
