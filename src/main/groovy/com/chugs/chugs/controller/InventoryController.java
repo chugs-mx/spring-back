@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/inventories")
@@ -21,7 +18,6 @@ public class InventoryController {
     public InventoryController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
-
 
     @GetMapping("")
     ResponseEntity<PagedModel<Inventory>> getInventories(
@@ -50,4 +46,31 @@ public class InventoryController {
         return ResponseEntity.ok(new PagedModel<>(invetories));
     }
 
+    @PostMapping("")
+    ResponseEntity<Inventory> createInventory(@RequestBody Inventory inventory) {
+        Inventory createdInventory = inventoryService.createInventory(inventory);
+        logger.info("[Post] Inventory created: {}", createdInventory.getInventoryId());
+        return ResponseEntity.ok(createdInventory);
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<Inventory> updateInventory(@PathVariable("id") Long id, @RequestBody Inventory inventory) {
+        Inventory updatedInventory = inventoryService.updateInventory(id, inventory);
+        logger.info("[Put] Inventory updated: {}", updatedInventory.getInventoryId());
+        return ResponseEntity.ok(updatedInventory);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Inventory> deleteInventory(@PathVariable("id") Long id) {
+        var deletedInventory = inventoryService.deleteInventory(id);
+        logger.info("[Delete] Inventory deleted: {}", id);
+        return ResponseEntity.accepted().body(deletedInventory);
+    }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<Inventory> patchInventory(@PathVariable("id") Long id, @RequestBody Inventory inventory) {
+        Inventory patchedInventory = inventoryService.patchInventory(id, inventory);
+        logger.info("[Patch] Inventory patched: {}", patchedInventory.getInventoryId());
+        return ResponseEntity.ok(patchedInventory);
+    }
 }
