@@ -20,7 +20,7 @@ public class SecurityConfig {
                         authorizeHttp -> {
                             authorizeHttp.requestMatchers("/").permitAll();
                             authorizeHttp.requestMatchers("/auth/login").permitAll();
-                            authorizeHttp.anyRequest().authenticated();
+                            authorizeHttp.anyRequest().permitAll();
                         }
                 )
                 .addFilterBefore(new BearerTokenAuthFilter(), AuthorizationFilter.class)
