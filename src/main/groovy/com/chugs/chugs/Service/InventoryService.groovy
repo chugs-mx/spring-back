@@ -167,4 +167,8 @@ class InventoryService {
         }
         return inventoryRepository.save(existingInventory)
     }
+
+    Iterable<String> getInventoryCategories() {
+        return Inventory.getCategories();
+    }
 }

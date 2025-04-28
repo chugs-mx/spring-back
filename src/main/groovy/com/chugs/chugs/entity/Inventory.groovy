@@ -40,6 +40,7 @@ class Inventory {
     @Column(nullable = false)
     BigDecimal quantity
 
+
     enum InventoryCategory {
         CLUTTER, REFRIGERATED, CLEANING, DISPOSABLE, FROZEN
     }
