@@ -168,7 +168,13 @@ class InventoryService {
         return inventoryRepository.save(existingInventory)
     }
 
-    Iterable<String> getInventoryCategories() {
-        return Inventory.getCategories();
+    Inventory getInventory(long id) {
+        Optional<Inventory> optionalInventory = inventoryRepository.findById(id)
+        if (optionalInventory.isEmpty()) {
+            logger.info("Inventory not found with id: $id")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory not found with id: $id")
+        } else {
+            return optionalInventory.get()
+        }
     }
 }

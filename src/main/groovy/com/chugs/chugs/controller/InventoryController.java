@@ -19,6 +19,13 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<Inventory> getInventory(@PathVariable("id") Long id) {
+        Inventory inventory = inventoryService.getInventory(id);
+        logger.info("[Get] Inventory found: {}", inventory.getInventoryId());
+        return ResponseEntity.ok(inventory);
+    }
+
     @GetMapping("")
     ResponseEntity<PagedModel<Inventory>> getInventories(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -75,9 +82,14 @@ public class InventoryController {
     }
 
     @GetMapping("/categories")
-    ResponseEntity<Inventory.InventoryCategory> getInventoryCategories() {
+    ResponseEntity<Inventory.InventoryCategory[]> getInventoryCategories() {
+        logger.info("[Get] Categories found: {}", Inventory.InventoryCategory.values().length);
+        return ResponseEntity.ok(Inventory.InventoryCategory.values());
+    }
 
-        logger.info("[Get] Categories found: {}");
-        return ResponseEntity.ok(Inventory.InventoryCategory);
+    @GetMapping("/subcategories")
+    ResponseEntity<Inventory.Subcategory[]> getInventorySubCategories() {
+        logger.info("[Get] Subcategories found: {}", Inventory.Subcategory.values().length);
+        return ResponseEntity.ok(Inventory.Subcategory.values());
     }
 }
