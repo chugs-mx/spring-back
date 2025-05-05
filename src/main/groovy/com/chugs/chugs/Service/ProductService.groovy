@@ -24,6 +24,7 @@ class ProductService {
     public static final Logger logger = LoggerFactory.getLogger(this.class);
 
     Product createProduct(Product product){
+        logger.info("Create product: $product")
         validateProduct(product)
         return productRepository.save(product)
     }

@@ -49,4 +49,13 @@ public class ProductController {
         return ResponseEntity.ok(new PagedModel<>(products));
     }
 
+    @PostMapping("")
+    ResponseEntity<Product> createProduct(@RequestBody Product product){
+        Product createProduct = productService.createProduct(product);
+        logger.info("[POST] create product: {}", createProduct.getProductId());
+        return ResponseEntity.ok(createProduct);
+    }
+
+
+
 }
