@@ -56,6 +56,10 @@ public class ProductController {
         return ResponseEntity.ok(createProduct);
     }
 
-
-
+    @PutMapping("/{id}")
+    ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody Product product){
+        Product updateProduct = productService.updateProduct(id, product);
+        logger.info("[PUT] update product: {}", updateProduct.getProductId());
+        return ResponseEntity.ok(updateProduct);
+    }
 }
