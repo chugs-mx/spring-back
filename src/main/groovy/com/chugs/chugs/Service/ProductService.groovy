@@ -2,8 +2,15 @@ package com.chugs.chugs.Service
 
 import com.chugs.chugs.entity.Product
 import com.chugs.chugs.repository.ProductRepository
+import com.chugs.chugs.repository.specification.ProductSpecification
 import jakarta.transaction.Transactional
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -13,6 +20,8 @@ class ProductService {
 
     @Autowired
     ProductRepository productRepository
+
+    public static final Logger logger = LoggerFactory.getLogger(this.class);
 
     Product createProduct(Product product){
         validateProduct(product)
@@ -46,7 +55,7 @@ class ProductService {
         return productRepository.findByProductCategory(category)
     }
 
-    void validateProduct(Product product){
+    static void validateProduct(Product product){
         if( product.name == null || product.name.trim().isEmpty() || product.name.length() > 100 ){
             throw new IllegalArgumentException("Product name is required.")
         }
@@ -61,5 +70,22 @@ class ProductService {
         }
     }
 
+    Page<Product> getProductsWithPaginationFilteringAndSorting(int page, int size, String search, String sort, boolean asc, String category){
+        Sort sortOrder = sort ? ( asc ? Sort.by(sort).ascending() : Sort.by(sort).descending() ) : Sort.unsorted()
+        PageRequest pageRequest = PageRequest.of(page, size, sortOrder)
+        Specification<Product> spec = ProductSpecification.getSpecification(search, category);
+        Page<Product> productPage = productRepository.findAll(spec, pageRequest);
+        return productPage;
+    }
+
+    Product getProduct(long id){
+        Optional<Product> optionalProduct = productRepository.findById(id)
+        if( optionalProduct.isEmpty() ){
+            logger.info("Product not found with id: $id")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: $id")
+        }else {
+            return optionalProduct.get()
+        }
+    }
 
 }
