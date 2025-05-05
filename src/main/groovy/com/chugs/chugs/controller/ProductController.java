@@ -17,6 +17,13 @@ public class ProductController {
 
     public ProductController(ProductService productService){ this.productService = productService; }
 
+    @GetMapping("/{id}")
+    ResponseEntity<Product> getProduct(@PathVariable("id") Long id){
+        Product product = productService.getProduct(id);
+        logger.info("[Get] product found {}", product.getProductId());
+        return ResponseEntity.ok(product);
+    }
+
     @GetMapping("")
     ResponseEntity<PagedModel<Product>>getProducts(
             @RequestParam( name = "page", defaultValue = "0" ) int page,
