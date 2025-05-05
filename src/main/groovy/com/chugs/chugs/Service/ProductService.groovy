@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
+import javax.swing.text.html.Option
+
 @Service
 class ProductService {
 
@@ -29,23 +31,45 @@ class ProductService {
         return productRepository.save(product)
     }
 
-    @Transactional
-    Product updateProduct(Long productId, Product updateProduct){
-        return productRepository.findById(productId).map (product -> {
-            validateProduct(updateProduct)
-            product.setName(updateProduct.name)
-            product.setDescription(updateProduct.description)
-            product.setProductCategory(updateProduct.productCategory)
-            product.setPrice(updateProduct.price)
-            return productRepository.save(product)
-        }) .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Product not found."))
+
+    Product updateProduct(Long id, Product product){
+        Optional<Product> optionalExistingProduct = productRepository.findById(id)
+
+        if( optionalExistingProduct.isEmpty() ){
+            logger.info("Product not found with id: $id")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: $id")
+        }else{
+            logger.info("Product found with id: $id")
+        }
+
+        Product exisitingProduct = optionalExistingProduct.get()
+
+        if( product.name ){
+            exisitingProduct.name = product.name
+        }
+        if( product.description = product.description ){
+            exisitingProduct.description = product.description
+        }
+        if( product.price ){
+            exisitingProduct.price = product.price
+        }
+        if( product.productCategory ){
+            exisitingProduct.productCategory = product.productCategory
+        }
+        return productRepository.save(exisitingProduct)
     }
 
-    @Transactional
-    void deleteProduct(Long productId){
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Product not found."))
-        productRepository.delete(product)
+
+    Product deleteProduct(Long id){
+        Optional<Product> optionalExistingProduct = productRepository.findById(id)
+        if( optionalExistingProduct.isPresent() ){
+            Product product = optionalExistingProduct.get()
+            productRepository.delete(product)
+            return product
+        }else {
+            logger.error("Product not found with id: $id")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: $id")
+        }
     }
 
     List<Product> getAllProducts(){
@@ -88,5 +112,31 @@ class ProductService {
             return optionalProduct.get()
         }
     }
+
+    Product patchProduct(Long id, Product product){
+        Optional<Product> optionalExistingProduct = productRepository.findById(id);
+        if( optionalExistingProduct.isEmpty() ){
+            logger.info("Product not found with id: $id")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: $id")
+        }else{
+            logger.info("Product found with id: $id")
+        }
+
+        Product existingProduct = optionalExistingProduct.get()
+        if( product.name ){
+            existingProduct.name = product.name
+        }
+        if( product.description ){
+            existingProduct.description = product.description
+        }
+        if( product.price ){
+            existingProduct.price = product.price
+        }
+        if( product.productCategory ){
+            existingProduct.productCategory = product.productCategory
+        }
+        return productRepository.save(existingProduct)
+    }
+
 
 }

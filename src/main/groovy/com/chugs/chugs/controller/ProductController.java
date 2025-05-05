@@ -62,4 +62,20 @@ public class ProductController {
         logger.info("[PUT] update product: {}", updateProduct.getProductId());
         return ResponseEntity.ok(updateProduct);
     }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Product> deleteProduct(@PathVariable("id") Long id) {
+        var deletedProduct = productService.deleteProduct(id);
+        logger.info("[Delete] Product deleted: {}", id);
+        return ResponseEntity.accepted().body(deletedProduct);
+    }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<Product> patchProduct(@PathVariable("id") Long id, @RequestBody Product product){
+        Product patchedProduct = productService.patchProduct(id, product);
+        logger.info("[PATCH] Product patched: {}", patchedProduct.getProductId());
+        return ResponseEntity.ok(patchedProduct);
+    }
+
+
 }
