@@ -27,7 +27,6 @@ class ProductService {
 
     Product createProduct(Product product){
         logger.info("Create product: $product")
-        validateProduct(product)
         return productRepository.save(product)
     }
 

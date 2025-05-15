@@ -1,6 +1,7 @@
 package com.chugs.chugs.controller;
 
 import com.chugs.chugs.Service.ProductService;
+import com.chugs.chugs.dto.ProductRequestDTO;
 import com.chugs.chugs.entity.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,10 +51,19 @@ public class ProductController {
     }
 
     @PostMapping("")
-    ResponseEntity<Product> createProduct(@RequestBody Product product){
-        Product createProduct = productService.createProduct(product);
-        logger.info("[POST] create product: {}", createProduct.getProductId());
-        return ResponseEntity.ok(createProduct);
+    ResponseEntity<Product> createProduct(@RequestBody ProductRequestDTO request){
+        Product product = new Product();
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setTypes(request.getTypes());
+        product.setSize(request.getSize());
+        product.setDefaultIngredients(request.getDefaultIngredients());
+
+        product.setProductCategory(request.getCategory());
+
+        Product createdProduct = productService.createProduct(product);
+        return ResponseEntity.ok(createdProduct);
     }
 
     @PutMapping("/{id}")
@@ -77,5 +87,20 @@ public class ProductController {
         return ResponseEntity.ok(patchedProduct);
     }
 
+    @GetMapping("/categories")
+    ResponseEntity<Product.Category[]> getProductCategories(){
+        logger.info("[GET] Categories found: {}", Product.Category.values().length);
+        return ResponseEntity.ok(Product.Category.values());
+    }
 
+    private Product.Category translateCategory(String categoryStr) {
+        return switch (categoryStr.toUpperCase()) {
+            case "HAMBURGUESAS" -> Product.Category.HAMBURGERS;
+            case "BEBIDAS" -> Product.Category.DRINKS;
+            case "EXTRAS" -> Product.Category.EXTRA;
+            case "PAPAS" -> Product.Category.POTATOES;
+            case "POSTRES" -> Product.Category.DESSERTS;
+            default -> throw new IllegalArgumentException("Invalid category: " + categoryStr);
+        };
+    }
 }
