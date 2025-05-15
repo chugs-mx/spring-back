@@ -10,13 +10,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(
+        return http
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(
                         authorizeHttp -> {
                             authorizeHttp.requestMatchers("/").permitAll();
                             authorizeHttp.requestMatchers("/auth/login").permitAll();
