@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ProductRepository extends JpaRepository<Product, Long>{
-    List<Product> findByProductCategory(Product.Category category)
+   // List<Product> findByProductCategory(Product.Category category)
     Page<Product> findAll(Specification<Product> specification, Pageable pageable)
 
 }

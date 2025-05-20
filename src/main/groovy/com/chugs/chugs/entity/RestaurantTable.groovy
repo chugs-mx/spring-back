@@ -7,6 +7,7 @@ import jakarta.persistence.*
 class RestaurantTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @Column(name = "id")
     Long tableId
 
     @Column(name = "seat_number", nullable = false, columnDefinition = "SMALLINT UNSIGNED")

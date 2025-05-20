@@ -80,7 +80,7 @@ public class InventoryController {
         logger.info("[Patch] Inventory patched: {}", patchedInventory.getInventoryId());
         return ResponseEntity.ok(patchedInventory);
     }
-
+/**
     @GetMapping("/categories")
     ResponseEntity<Inventory.InventoryCategory[]> getInventoryCategories() {
         logger.info("[Get] Categories found: {}", Inventory.InventoryCategory.values().length);
@@ -92,4 +92,5 @@ public class InventoryController {
         logger.info("[Get] Subcategories found: {}", Inventory.Subcategory.values().length);
         return ResponseEntity.ok(Inventory.Subcategory.values());
     }
+    **/
 }

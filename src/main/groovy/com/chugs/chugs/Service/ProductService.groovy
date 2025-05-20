@@ -1,5 +1,6 @@
 package com.chugs.chugs.Service
 
+import com.chugs.chugs.dto.ProductRequestDTO
 import com.chugs.chugs.entity.Product
 import com.chugs.chugs.repository.ProductRepository
 import com.chugs.chugs.repository.specification.ProductSpecification
@@ -25,9 +26,8 @@ class ProductService {
 
     public static final Logger logger = LoggerFactory.getLogger(this.class);
 
-    Product createProduct(Product product){
-        logger.info("Create product: $product")
-        return productRepository.save(product)
+    public Product createProductDTO(ProductRequestDTO dto){
+
     }
 
 
@@ -73,10 +73,6 @@ class ProductService {
 
     List<Product> getAllProducts(){
         return productRepository.findAll()
-    }
-
-    List<Product> getProductsByCategory(Product.Category category){
-        return productRepository.findByProductCategory(category)
     }
 
     static void validateProduct(Product product){

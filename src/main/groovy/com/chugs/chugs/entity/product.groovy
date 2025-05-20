@@ -1,6 +1,8 @@
 package com.chugs.chugs.entity
 import com.chugs.chugs.converter.StringListConverter;
 import jakarta.persistence.*
+import org.hibernate.annotations.ManyToAny
+import com.chugs.chugs.entity.Category
 
 
 @Entity
@@ -8,6 +10,7 @@ import jakarta.persistence.*
 class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Long productId
 
     @Column(nullable = false, length = 100)
@@ -19,22 +22,18 @@ class Product {
     @Column(nullable = false)
     BigDecimal price
 
-    @Column(nullable = false)
-    String size
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    Category category
 
-    @Convert(converter = StringListConverter.class)
-    @Column(nullable = false, columnDefinition = "TEXT")
-    List<String> types
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    Subcategory subcategory
 
-    @Convert(converter = StringListConverter.class)
-    @Column(nullable = false, columnDefinition = "TEXT")
-    List<String> defaultIngredients
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_size_id", nullable = false)
+    Size size
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    Category productCategory
-
-    enum Category{
-        HAMBURGERS, DRINKS, EXTRA, POTATOES, DESSERTS
-    }
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<ProductDefaultIngredient> defaultIngredients = []
 }

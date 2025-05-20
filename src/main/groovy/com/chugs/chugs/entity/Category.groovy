@@ -8,7 +8,7 @@ class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id" )
+    @Column(name = "id")
     Long id;
 
     @Column(name = "name", nullable = false, unique = true)
@@ -19,5 +19,8 @@ class Category {
 
     @OneToMany(mappedBy = "category", orphanRemoval = true)
     List<Subcategory> subcategories = []
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
 
 }

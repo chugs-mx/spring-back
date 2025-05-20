@@ -16,7 +16,9 @@ public class ProductController {
     final private ProductService productService;
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    public ProductController(ProductService productService){ this.productService = productService; }
+    public ProductController(ProductService productService){
+        this.productService = productService;
+    }
 
     @GetMapping("/{id}")
     ResponseEntity<Product> getProduct(@PathVariable("id") Long id){
@@ -53,16 +55,7 @@ public class ProductController {
     @PostMapping("")
     ResponseEntity<Product> createProduct(@RequestBody ProductRequestDTO request){
         Product product = new Product();
-        product.setName(request.getName());
-        product.setDescription(request.getDescription());
-        product.setPrice(request.getPrice());
-        product.setTypes(request.getTypes());
-        product.setSize(request.getSize());
-        product.setDefaultIngredients(request.getDefaultIngredients());
-
-        product.setProductCategory(request.getCategory());
-
-        Product createdProduct = productService.createProduct(product);
+        Product createdProduct = productService.createProductDTO(request);
         return ResponseEntity.ok(createdProduct);
     }
 
@@ -86,7 +79,7 @@ public class ProductController {
         logger.info("[PATCH] Product patched: {}", patchedProduct.getProductId());
         return ResponseEntity.ok(patchedProduct);
     }
-
+/**
     @GetMapping("/categories")
     ResponseEntity<Product.Category[]> getProductCategories(){
         logger.info("[GET] Categories found: {}", Product.Category.values().length);
@@ -103,4 +96,5 @@ public class ProductController {
             default -> throw new IllegalArgumentException("Invalid category: " + categoryStr);
         };
     }
+    **/
 }

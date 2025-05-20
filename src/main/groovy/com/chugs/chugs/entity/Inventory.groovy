@@ -8,17 +8,18 @@ import java.time.LocalDateTime
 class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Long inventoryId
 
     @Column(nullable = false, length = 100)
     String name
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    InventoryCategory inventoryCategory
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_category_id", nullable = false)
+    Category inventoryCategory
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_subcategory_id", nullable = false)
     Subcategory subcategory
 
     @Column(nullable = false, length = 500)
@@ -30,9 +31,9 @@ class Inventory {
     @Column(nullable = true)
     LocalDateTime expiryDate
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    UnitMeasure unitMeasure
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_unit_id", nullable = false)
+    Unit unitMeasure
 
     @Column(nullable = false)
     BigDecimal unitPrice
@@ -40,16 +41,4 @@ class Inventory {
     @Column(nullable = false)
     BigDecimal quantity
 
-
-    enum InventoryCategory {
-        CLUTTER, REFRIGERATED, CLEANING, DISPOSABLE, FROZEN
-    }
-
-    enum Subcategory{
-        INGREDIENT, PRODUCT_VARIANT, PRODUCT, MEAT, VEGETABLES, DRINKS
-    }
-
-    enum UnitMeasure {
-        KG, LTR, UNIT
-    }
 }

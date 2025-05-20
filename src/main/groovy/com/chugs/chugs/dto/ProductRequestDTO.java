@@ -9,10 +9,9 @@ public class ProductRequestDTO {
     private String name;
     private String description;
     private BigDecimal price;
-    private Product.Category category;
-    private List<String> types;
-    private String size;
-    private List<String> defaultIngredients;
+    private Long categoryId;
+    private List<String> subcategory;
+    private Long sizeId;
 
     public String getName() {
         return name;
@@ -38,35 +37,27 @@ public class ProductRequestDTO {
         this.price = price;
     }
 
-    public Product.Category getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Product.Category category) {
-        this.category = category;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public List<String> getTypes() {
-        return types;
+    public List<String> getSubcategory() {
+        return subcategory;
     }
 
-    public void setTypes(List<String> types) {
-        this.types = types;
+    public void setSubcategory(List<String> subcategory) {
+        this.subcategory = subcategory;
     }
 
-    public String getSize() {
-        return size;
+    public Long getSizeId() {
+        return sizeId;
     }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public List<String> getDefaultIngredients() {
-        return defaultIngredients;
-    }
-
-    public void setDefaultIngredients(List<String> defaultIngredients) {
-        this.defaultIngredients = defaultIngredients;
+    public void setSizeId(Long sizeId) {
+        this.sizeId = sizeId;
     }
 }

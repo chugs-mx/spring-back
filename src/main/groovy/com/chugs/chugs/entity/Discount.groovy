@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Long discountId
 
     @Column(nullable = false, length = 50)

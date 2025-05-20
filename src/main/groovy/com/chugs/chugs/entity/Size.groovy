@@ -7,10 +7,11 @@ import jakarta.persistence.*
 class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Long id
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_unit_id", nullable = false)
+    @JoinColumn(name = "unit_id", nullable = false)
     Unit unit
 
     @Column(nullable = false, precision = 10, scale = 2)
