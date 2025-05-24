@@ -17,4 +17,8 @@ class Size {
     @Column(nullable = false, precision = 10, scale = 2)
     BigDecimal quantity
 
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    private Subcategory subcategory;
+
 }

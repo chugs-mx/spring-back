@@ -92,14 +92,17 @@ CREATE TABLE unit(
 CREATE TABLE size(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     unit_id bigint NOT NULL,
+    subcategory_id bigint NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (unit_id) REFERENCES unit(id)
+    FOREIGN KEY (unit_id) REFERENCES unit(id),
+    FOREIGN KEY (subcategory_id) REFERENCES subcategory(id)
 );
 
 -- Create Product Table
 CREATE TABLE product(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+    description  VARCHAR(500) NOT NULL,
     category_id BIGINT NOT NULL,
     subcategory_id bigint NOT NULL,
     size_id bigint NOT NULL,
@@ -109,27 +112,33 @@ CREATE TABLE product(
     FOREIGN KEY (size_id) REFERENCES size(id)
 );
 
+
 -- Create Inventory Table
 CREATE TABLE inventory (
     id   BIGINT AUTO_INCREMENT PRIMARY KEY,
     name           VARCHAR(100) NOT NULL,
     category_id bigint NOT NULL,
+    subcategory_id bigint NOT NULL,
     description    VARCHAR(500) NOT NULL,
     entry_date     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expiry_date    TIMESTAMP NULL,
     size_id bigint NOT NULL,
     quantity       DECIMAL(12,2) NOT NULL,
     FOREIGN KEY (category_id) REFERENCES category(id),
+    FOREIGN KEY (subcategory_id) REFERENCES subcategory(id),
     FOREIGN KEY (size_id) REFERENCES size(id)
 );
 
 -- Create Product Default Ingredients Table
-CREATE TABLE product_default_ingredients(
-    product_id bigint NOT NULL,
+CREATE TABLE subcategory_default_ingredients(
+    subcategory_id bigint NOT NULL,
     ingredient_id bigint NOT NULL,
-    PRIMARY KEY(product_id, ingredient_id),
-    FOREIGN KEY (product_id) REFERENCES product(id),
-    FOREIGN KEY (ingredient_id) REFERENCES inventory(id)
+    size_id bigint NOT NULL,
+	quantity       DECIMAL(12,2) NOT NULL,
+    PRIMARY KEY(subcategory_id, ingredient_id),
+    FOREIGN KEY (subcategory_id) REFERENCES subcategory(id),
+    FOREIGN KEY (ingredient_id) REFERENCES inventory(id),
+    FOREIGN KEY (size_id) REFERENCES size(id)
 );
 
 -- Create Product Inventory Table
@@ -165,4 +174,53 @@ CREATE TABLE order_extra_supply (
     FOREIGN KEY (order_product_id) REFERENCES order_product(id),
     FOREIGN KEY (supply_id) REFERENCES inventory(id)
 );
+
+
+
+INSERT INTO category (id, name, description) VALUES
+(1, 'Comida', 'Platillos principales'),
+(2, 'Bebidas', 'Bebidas frías y calientes'),
+(3, 'Insumos', 'Ingredientes');
+
+
+INSERT INTO subcategory (id, category_id, name, description) VALUES
+(1, 1, 'Hamburguesa de res', 'Carne de res'),
+(2, 1, 'Hamburguesa vegana', 'A base de plantas'),
+(3, 2, 'Malteadas', 'Batidos cremosos'),
+(4, 3, 'Ingredientes hamburguesa', 'Ingredientes hamburguesa');
+
+
+INSERT INTO unit (id, name, abbreviation) VALUES
+(1, 'Gramos', 'g'),
+(2, 'Mililitros', 'ml'),
+(3, 'Pieza', 'pz'),
+(4, 'Hoja', 'hoja');
+
+
+INSERT INTO size (id, unit_id, subcategory_id, quantity) VALUES
+(1, 3, 1, 2),   -- Pan
+(2, 1, 1, 150), -- Carne
+(3, 1, 1, 270), -- Carne
+(4, 1, 1, 500), -- Carne
+(5, 4, 4, 3), -- Lechuga
+(11, 1, 3, 150), -- Helado
+(12, 2, 3, 200); -- Leche
+
+
+INSERT INTO inventory (id, category_id, subcategory_id, name, description, entry_date, size_id, quantity) VALUES
+(1, 1, 1, 'Pan de hamburguesa', 'Pan artesanal', '2025-05-23 00:00:00', 1, 100),
+(2, 1, 1, 'Carne de Res', 'Carne de res mediana', '2025-05-23 00:00:00', 3, 100),
+(3, 1, 1, 'Carne de Res', 'Carne de res chica', '2025-05-23 00:00:00', 2, 100),
+(4, 1, 1, 'Carne de Res', 'Carne de res grande', '2025-05-23 00:00:00', 4, 100),
+(5, 1, 1, 'Lechuga', 'lechuga', '2025-05-23 00:00:00', 1, 100),
+(6, 2, 3, 'Cerezas', 'En almíbar', '2025-05-23 00:00:00', 12, 100);
+
+INSERT INTO product (name, description, category_id, subcategory_id, size_id, price) VALUES
+('Hamburguesa mediana', 'Con carne de res mediana, lechuga y pan artesanal', 1, 1, 3, 89.00), -- Carne mediana (270g)
+('Hamburguesa chica', 'Con carne de res chica, lechuga y pan artesanal', 1, 1, 2, 79.00),     -- Carne chica (150g)
+('Hamburguesa grande', 'Con carne de res grande, lechuga y pan artesanal', 1, 1, 4, 109.00);  -- Carne grande (500g)s
+
+INSERT INTO product (name, description, category_id, subcategory_id, size_id, price) VALUES
+('Malteada chica', 'Malteada con 150g de helado y 200ml de leche', 2, 3, 11, 49.00), -- Helado
+('Malteada mediana', 'Malteada con 200ml de leche y cerezas', 2, 3, 12, 59.00);     -- Leche
 

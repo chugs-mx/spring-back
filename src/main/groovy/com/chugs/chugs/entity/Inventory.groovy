@@ -15,11 +15,11 @@ class Inventory {
     String name
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_category_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     Category inventoryCategory
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_subcategory_id", nullable = false)
+    @JoinColumn(name = "subcategory_id", nullable = false)
     Subcategory subcategory
 
     @Column(nullable = false, length = 500)
@@ -32,11 +32,8 @@ class Inventory {
     LocalDateTime expiryDate
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_unit_id", nullable = false)
-    Unit unitMeasure
-
-    @Column(nullable = false)
-    BigDecimal unitPrice
+    @JoinColumn(name = "size_id", nullable = false)
+    Size size
 
     @Column(nullable = false)
     BigDecimal quantity

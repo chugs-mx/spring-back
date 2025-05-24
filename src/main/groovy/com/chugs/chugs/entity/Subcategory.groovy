@@ -20,4 +20,10 @@ class Subcategory {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     Category category
+
+    @OneToMany(mappedBy = "subcategory")
+    List<Size> sizes;
+
+    @OneToMany(mappedBy = "subcategory")
+    List<SubcategoryDefaultIngredient> defaultIngredients;
 }

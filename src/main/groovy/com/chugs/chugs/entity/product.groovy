@@ -1,9 +1,7 @@
 package com.chugs.chugs.entity
-import com.chugs.chugs.converter.StringListConverter;
-import jakarta.persistence.*
-import org.hibernate.annotations.ManyToAny
-import com.chugs.chugs.entity.Category
 
+
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "product")
@@ -31,9 +29,6 @@ class Product {
     Subcategory subcategory
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_size_id", nullable = false)
+    @JoinColumn(name = "size_id", nullable = false)
     Size size
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<ProductDefaultIngredient> defaultIngredients = []
 }
