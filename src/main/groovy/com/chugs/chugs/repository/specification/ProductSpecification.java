@@ -22,7 +22,7 @@ public class ProductSpecification {
      * @return A Specification that combines all the search criteria using AND operator,
      *   returns all records if no criteria specified
      */
-    public static Specification<Product> getSpecification(String search, String category){
+    public static Specification<Product> getSpecification(String search, String category, String subcategory){
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if( search != null && !search.isEmpty() ){
@@ -30,12 +30,17 @@ public class ProductSpecification {
                         criteriaBuilder.or(
                                 criteriaBuilder.like(root.get("name"), "%" + search + "%"),
                                 criteriaBuilder.like(root.get("description"), "%" + search + "%"),
-                                criteriaBuilder.like(root.get("productCategory"), "%" + search + "%")
+                                criteriaBuilder.like(root.get("category").get("name"), "%" + search + "%"),
+                                criteriaBuilder.like(root.get("subcategory").get("name"), "%" + search + "%")
                         )
                 );
             }
             if( category != null && !category.isEmpty() ){
-                predicates.add( criteriaBuilder.equal(root.get("productCategory"), category) );
+                predicates.add( criteriaBuilder.equal(root.get("category").get("name"), category) );
+            }
+
+            if( subcategory != null && !subcategory.isEmpty() ){
+                predicates.add( criteriaBuilder.equal(root.get("subcategory").get("name"), subcategory) );
             }
             return criteriaBuilder.and( predicates.toArray(Predicate[]::new) );
         };

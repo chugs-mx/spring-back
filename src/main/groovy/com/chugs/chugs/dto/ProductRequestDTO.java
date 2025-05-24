@@ -1,16 +1,13 @@
 package com.chugs.chugs.dto;
 
-import com.chugs.chugs.entity.Product;
-
 import java.math.BigDecimal;
-import java.util.List;
 
 public class ProductRequestDTO {
     private String name;
     private String description;
     private BigDecimal price;
     private Long categoryId;
-    private List<String> subcategory;
+    private Long subcategoryId;
     private Long sizeId;
 
     public String getName() {
@@ -45,12 +42,12 @@ public class ProductRequestDTO {
         this.categoryId = categoryId;
     }
 
-    public List<String> getSubcategory() {
-        return subcategory;
+    public Long getSubcategoryId() {
+        return subcategoryId;
     }
 
-    public void setSubcategory(List<String> subcategory) {
-        this.subcategory = subcategory;
+    public void setSubcategoryId(Long subcategoryId) {
+        this.subcategoryId = subcategoryId;
     }
 
     public Long getSizeId() {
