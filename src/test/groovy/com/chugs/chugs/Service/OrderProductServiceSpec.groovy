@@ -22,7 +22,7 @@ class OrderProductServiceSpec extends Specification{
         BigDecimal quantity = BigDecimal.valueOf(2)
 
         OrderTable orderTable = new OrderTable(orderId: orderId)
-        Product product = new Product(productId: productId, name: "Burger", description: "Burger", productCategory: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
+        Product product = new Product(productId: productId, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
 
         orderTableRepository.findById(orderId) >> Optional.of(orderTable)
         productRepository.findById(productId) >> Optional.of(product)
