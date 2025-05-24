@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 class OrderTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Long orderId
 
     @Column(nullable = false)

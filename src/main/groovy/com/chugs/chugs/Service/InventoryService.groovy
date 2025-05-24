@@ -60,14 +60,15 @@ class InventoryService {
         logger.info("Creating inventory: $inventory")
         return inventoryRepository.save(inventory)
     }
-
+/**
     List<Inventory> inventoriesByCategory(Inventory.InventoryCategory category){
         if( category == null ){
             throw new IllegalArgumentException("Category is null.")
         }
         return inventoryRepository.findByInventoryCategory(category)
-    }
 
+    }
+**/
     Page<Inventory> getInventoriesWithPaginationSortingAndFiltering(int page, int size, String search, String sort, boolean asc , String category, String subCategory) {
 
         Sort sortOrder = sort ?  (asc ? Sort.by(sort).ascending() : Sort.by(sort).descending() ) : Sort.unsorted()

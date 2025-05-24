@@ -1,5 +1,6 @@
 package com.chugs.chugs.entity
 
+
 import jakarta.persistence.*
 
 @Entity
@@ -7,6 +8,7 @@ import jakarta.persistence.*
 class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Long productId
 
     @Column(nullable = false, length = 100)
@@ -18,11 +20,15 @@ class Product {
     @Column(nullable = false)
     BigDecimal price
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    Category productCategory
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    Category category
 
-    enum Category{
-        HAMBURGERS, DRINKS, EXTRA, POTATOES, DESSERTS
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    Subcategory subcategory
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "size_id", nullable = false)
+    Size size
 }

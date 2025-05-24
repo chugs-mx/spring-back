@@ -10,6 +10,6 @@ import org.springframework.data.domain.Pageable;
 
 @Repository
 interface InventoryRepository extends JpaRepository<Inventory, Long>, JpaSpecificationExecutor<Inventory>{
-    List<Inventory> findByInventoryCategory(Inventory.InventoryCategory inventoryType)
+    // List<Inventory> findByInventoryCategory(Inventory.InventoryCategory inventoryType)
     Page<Inventory> findAll(Specification<Inventory> specification, Pageable pageable)
 }
