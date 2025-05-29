@@ -1,18 +1,20 @@
 package com.chugs.chugs.dto;
 
+import com.chugs.chugs.entity.Size;
+
 import java.math.BigDecimal;
 
 public class IngredientDTO {
     private Long id;
     private String name;
     private BigDecimal quantity;
-    private String unit;
+    private String size;
 
-    public IngredientDTO(Long id, String name, BigDecimal quantity, String unit) {
+    public IngredientDTO(Long id, String name, BigDecimal quantity, String size) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
-        this.unit = unit;
+        this.size = size;
     }
 
     public Long getId() {
@@ -39,11 +41,11 @@ public class IngredientDTO {
         this.quantity = quantity;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getSize() {
+        return size;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setSize(String size) {
+        this.size = size;
     }
 }

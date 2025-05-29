@@ -32,7 +32,7 @@ public class ProductController {
     @GetMapping("/{id}")
     ResponseEntity<ProductResponseDTO> getProduct(@PathVariable("id") Long id){
         Product product = productService.getProduct(id);
-        logger.info("[Get] product found {}", product.getProductId());
+        logger.info("[Get] product found {}", product.getId());
         ProductResponseDTO dto = productMapper.toDTO(product);
         return ResponseEntity.ok(dto);
     }
@@ -66,8 +66,8 @@ public class ProductController {
 
     @PostMapping("")
     ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO dto){
-        Product product = productMapper.toEntity(dto);
-        Product createdProduct = productService.createProduct(product);
+        //Product product = productMapper.toEntity(dto);
+        Product createdProduct = productService.createProduct(dto);
         ProductResponseDTO responseDTO = productMapper.toDTO(createdProduct);
         return ResponseEntity.ok(responseDTO);
     }
@@ -83,7 +83,7 @@ public class ProductController {
     @PatchMapping("/{id}")
     ResponseEntity<ProductResponseDTO> patchProduct(@PathVariable("id") Long id, @RequestBody Product product){
         Product patchedProduct = productService.patchProduct(id, product);
-        logger.info("[PATCH] Product patched: {}", patchedProduct.getProductId());
+        logger.info("[PATCH] Product patched: {}", patchedProduct.getId());
         return ResponseEntity.ok(productMapper.toDTO(patchedProduct));
     }
 

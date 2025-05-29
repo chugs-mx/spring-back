@@ -9,7 +9,7 @@ class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long productId
+    Long id
 
     @Column(nullable = false, length = 100)
     String name
@@ -31,4 +31,7 @@ class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "size_id", nullable = false)
     Size size
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    List<ProductDefaultIngredient> defaultIngredients
 }

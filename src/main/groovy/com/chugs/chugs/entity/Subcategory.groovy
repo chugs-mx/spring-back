@@ -24,6 +24,6 @@ class Subcategory {
     @OneToMany(mappedBy = "subcategory")
     List<Size> sizes;
 
-    @OneToMany(mappedBy = "subcategory")
+    @OneToMany(mappedBy = "subcategory", fetch = FetchType.LAZY)
     List<SubcategoryDefaultIngredient> defaultIngredients;
 }

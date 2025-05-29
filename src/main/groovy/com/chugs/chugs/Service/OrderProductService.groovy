@@ -42,7 +42,7 @@ class OrderProductService {
     void deleteProductFromOrder(OrderTable order, Product product){
         OrderTable orderTable = orderTableRepository.findById(order.orderId)
             .orElseThrow() -> new IllegalArgumentException("OrderTable not found.")
-        Product product1 = productRepository.findById(product.productId)
+        Product product1 = productRepository.findById(product.id)
             .orElseThrow() -> new IllegalArgumentException("Product not found.")
        OrderProduct orderProduct = orderProductRepository.findByOrderAndProduct(order, product)
             .orElseThrow() -> new IllegalArgumentException("OrderProduct not found.")
@@ -54,7 +54,7 @@ class OrderProductService {
     OrderProduct updateProductStatus(OrderTable order, Product product, OrderProduct.OrderStatus newStatus){
         OrderTable orderTable = orderTableRepository.findById(order.orderId)
             .orElseThrow() -> new IllegalArgumentException("OrderTable not found.")
-        Product product1 = productRepository.findById(product.productId)
+        Product product1 = productRepository.findById(product.id)
             .orElseThrow() -> new IllegalArgumentException("Product not found.")
         OrderProduct orderProduct = orderProductRepository.findByOrderAndProduct(order, product)
             .orElseThrow() -> new IllegalArgumentException("OrderProduct not found. ")

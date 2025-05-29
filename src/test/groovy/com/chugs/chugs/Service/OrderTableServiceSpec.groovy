@@ -92,8 +92,8 @@ class OrderTableServiceSpec extends Specification{
     def"get products by order"(){
         given:
         OrderTable order = new OrderTable(orderId: 1L)
-        Product product = new Product(productId: 1L, price: new BigDecimal("10.00"))
-        Product product1 = new Product(productId: 2L, price: new BigDecimal("10.00"))
+        Product product = new Product(id: 1L, price: new BigDecimal("10.00"))
+        Product product1 = new Product(id: 2L, price: new BigDecimal("10.00"))
 
         OrderProduct orderProduct = new OrderProduct(order: order, product: product, quantity: new BigDecimal("2"))
         OrderProduct orderProduct1 = new OrderProduct(order: order, product: product1, quantity: new BigDecimal("2"))

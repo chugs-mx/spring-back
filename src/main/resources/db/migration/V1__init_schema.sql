@@ -175,6 +175,17 @@ CREATE TABLE order_extra_supply (
     FOREIGN KEY (supply_id) REFERENCES inventory(id)
 );
 
+CREATE TABLE product_default_ingredient (
+    product_id    BIGINT NOT NULL,
+    inventory_id BIGINT NOT NULL,
+    size_id       BIGINT NOT NULL,
+    quantity      DECIMAL(12,2) NOT NULL,
+    PRIMARY KEY (product_id, inventory_id),
+    FOREIGN KEY (product_id) REFERENCES product(id),
+    FOREIGN KEY (inventory_id) REFERENCES inventory(id),
+    FOREIGN KEY (size_id) REFERENCES size(id)
+);
+
 
 
 INSERT INTO category (id, name, description) VALUES
@@ -224,3 +235,5 @@ INSERT INTO product (name, description, category_id, subcategory_id, size_id, pr
 ('Malteada chica', 'Malteada con 150g de helado y 200ml de leche', 2, 3, 11, 49.00), -- Helado
 ('Malteada mediana', 'Malteada con 200ml de leche y cerezas', 2, 3, 12, 59.00);     -- Leche
 
+INSERT INTO inventory (id, category_id, subcategory_id, name, description, entry_date, size_id, quantity) VALUES
+(7, 2,3,'Fresa', 'Fresas frescas', '2025-05-23 00:00:00', 11, 100);

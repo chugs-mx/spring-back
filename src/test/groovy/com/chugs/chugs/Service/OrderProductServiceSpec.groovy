@@ -22,7 +22,7 @@ class OrderProductServiceSpec extends Specification{
         BigDecimal quantity = BigDecimal.valueOf(2)
 
         OrderTable orderTable = new OrderTable(orderId: orderId)
-        Product product = new Product(productId: productId, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
+        Product product = new Product(id: productId, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
 
         orderTableRepository.findById(orderId) >> Optional.of(orderTable)
         productRepository.findById(productId) >> Optional.of(product)
@@ -75,11 +75,11 @@ class OrderProductServiceSpec extends Specification{
     def"testDeleteProduct"(){
         given:
         OrderTable order = new OrderTable(orderId: 1L)
-        Product product = new Product(productId: 2L)
+        Product product = new Product(id: 2L)
         OrderProduct orderProduct = new OrderProduct(order: order, product: product)
 
         orderTableRepository.findById(order.orderId) >> Optional.of(order)
-        productRepository.findById(product.productId) >> Optional.of(product)
+        productRepository.findById(product.id) >> Optional.of(product)
         orderProductRepository.findByOrderAndProduct(order, product) >> Optional.of(orderProduct)
 
         when:
@@ -92,7 +92,7 @@ class OrderProductServiceSpec extends Specification{
     def"test DeleteProduct Should Throw Exception When Order Not Found"(){
         given:
         OrderTable order = new OrderTable(orderId: 1L)
-        Product product = new Product(productId: 2L)
+        Product product = new Product(id: 2L)
 
         orderTableRepository.findById(order.orderId) >> Optional.empty()
 
@@ -106,11 +106,11 @@ class OrderProductServiceSpec extends Specification{
     def"updateProductStatus successfully"(){
         given:
         OrderTable order = new OrderTable(orderId: 1L)
-        Product product = new Product(productId: 2L)
+        Product product = new Product(id: 2L)
         OrderProduct orderProduct = new OrderProduct(order: order, product: product)
 
         orderTableRepository.findById(order.orderId) >> Optional.of(order)
-        productRepository.findById(product.productId) >> Optional.of(product)
+        productRepository.findById(product.id) >> Optional.of(product)
         orderProductRepository.findByOrderAndProduct(order, product) >> Optional.of(orderProduct)
         orderProductRepository.save(_ as OrderProduct) >> { args -> args[0] }
 
@@ -124,10 +124,10 @@ class OrderProductServiceSpec extends Specification{
     def"updateProductStatus should throw exception if OrderProduct not found"(){
         given:
         OrderTable order = new OrderTable(orderId: 1L)
-        Product product = new Product(productId: 2L)
+        Product product = new Product(id: 2L)
 
         orderTableRepository.findById(order.orderId) >> Optional.of(order)
-        productRepository.findById(product.productId) >> Optional.of(product)
+        productRepository.findById(product.id) >> Optional.of(product)
         orderProductRepository.findByOrderAndProduct(order, product) >> Optional.empty()
 
         when:

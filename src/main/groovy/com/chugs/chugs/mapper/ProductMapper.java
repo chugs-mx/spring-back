@@ -43,7 +43,7 @@ public class ProductMapper {
 
     public ProductResponseDTO toDTO(Product product) {
         ProductResponseDTO dto = new ProductResponseDTO();
-        dto.setProductId(product.getProductId());
+        dto.setProductId(product.getId());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());

@@ -1,5 +1,6 @@
 package com.chugs.chugs.entity
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
 @Entity
@@ -9,11 +10,12 @@ class SubcategoryDefaultIngredient {
     SubcategoryDefaultIngredientId id
 
     @ManyToOne
-    @MapsId("subcategoryId")
+    @JoinColumn(name = "subcategory_id")
+    @JsonBackReference
     Subcategory subcategory;
 
     @ManyToOne
-    @MapsId("ingredientId")
+    @MapsId("ingredient_id")
     Inventory ingredient;
 
     @ManyToOne

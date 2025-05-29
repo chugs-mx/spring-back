@@ -44,8 +44,8 @@ class ProductServiceSpec extends Specification{
     def"testUpdateProduct"(){
         given:
         Long productId = 1L
-        Product existingProduct = new Product(productId: productId, name: "Hamburger", description: "Deli hamburguer", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120) )
-        Product updateProduct = new Product(productId: productId, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
+        Product existingProduct = new Product(id: productId, name: "Hamburger", description: "Deli hamburguer", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120) )
+        Product updateProduct = new Product(id: productId, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
 
         productRepository.findById(productId) >> Optional.of(existingProduct)
         productRepository.save(_ as Product) >> updateProduct
@@ -63,7 +63,7 @@ class ProductServiceSpec extends Specification{
     def"testDeleteProduct"(){
         given:
         Long productId = 1L
-        Product product = new Product(productId: productId, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
+        Product product = new Product(id: productId, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(120))
         productRepository.findById(productId) >> Optional.of(product)
 
         when:
@@ -76,8 +76,8 @@ class ProductServiceSpec extends Specification{
     def "testGetAll"(){
         given:
         List<Product> products = [
-                new Product(productId: 1L, name: "Milkshake", description: "Cramel Milkshake", category: Product.Category.DRINKS, price: BigDecimal.valueOf(70)),
-                new Product(productId: 2L, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(100))
+                new Product(id: 1L, name: "Milkshake", description: "Cramel Milkshake", category: Product.Category.DRINKS, price: BigDecimal.valueOf(70)),
+                new Product(id: 2L, name: "Burger", description: "Burger", category: Product.Category.HAMBURGERS, price: BigDecimal.valueOf(100))
         ]
 
         productRepository.findAll() >> products
@@ -93,8 +93,8 @@ class ProductServiceSpec extends Specification{
         given:
         def category = Product.Category.HAMBURGERS
         List<Product> hamburgers = [
-                new Product(productId: 1L, name: "Burger", description: "Burger", category: category, price: BigDecimal.valueOf(120)),
-                new Product(productId: 2L, name: "Cheese Burger", description: "Burger", category: category, price: BigDecimal.valueOf(30))
+                new Product(id: 1L, name: "Burger", description: "Burger", category: category, price: BigDecimal.valueOf(120)),
+                new Product(id: 2L, name: "Cheese Burger", description: "Burger", category: category, price: BigDecimal.valueOf(30))
         ]
 
         productRepository.findByProductCategory(category) >> hamburgers

@@ -2,14 +2,21 @@ package com.chugs.chugs.Service
 
 import com.chugs.chugs.dto.CategoryDTO
 import com.chugs.chugs.dto.IngredientDTO
+import com.chugs.chugs.dto.ProductRequestDTO
 import com.chugs.chugs.dto.ProductResponseDTO
 import com.chugs.chugs.dto.SizeDTO
 import com.chugs.chugs.dto.SubcategoryDTO
 import com.chugs.chugs.entity.Category
 import com.chugs.chugs.entity.Product
+import com.chugs.chugs.entity.ProductDefaultIngredient
+import com.chugs.chugs.entity.ProductDefaultIngredientId
 import com.chugs.chugs.mapper.ProductMapper
 import com.chugs.chugs.repository.CategoryRepository
+import com.chugs.chugs.repository.InventoryRepository
+import com.chugs.chugs.repository.ProductDefaultIngredientRepository
+import com.chugs.chugs.repository.ProductInventoryRepository
 import com.chugs.chugs.repository.ProductRepository
+import com.chugs.chugs.repository.SizeRepository
 import com.chugs.chugs.repository.specification.ProductSpecification
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -30,24 +37,50 @@ class ProductService {
     @Autowired
     ProductRepository productRepository
     CategoryRepository categoryRepository
+    ProductDefaultIngredientRepository productDefaultIngredientRepository
+    InventoryRepository inventoryRepository
+    SizeRepository sizeRepository
 
     private final ProductMapper productMapper
 
 
     public static final Logger logger = LoggerFactory.getLogger(this.class)
 
-    ProductService(ProductMapper productMapper, ProductRepository productRepository, CategoryRepository categoryRepository) {
+    ProductService(ProductMapper productMapper,
+                   ProductRepository productRepository,
+                   CategoryRepository categoryRepository,
+                   ProductDefaultIngredientRepository productDefaultIngredientRepository,
+                   InventoryRepository inventoryRepository,
+                   SizeRepository sizeRepository) {
         this.productMapper = productMapper
         this.productRepository = productRepository
         this.categoryRepository = categoryRepository
+        this.productDefaultIngredientRepository = productDefaultIngredientRepository
+        this.inventoryRepository = inventoryRepository
+        this.sizeRepository = sizeRepository
     }
 
-    public Product createProduct(Product product) {
-        productRepository.findById(product.productId).ifPresent {
-            logger.error("Product already exist")
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Product already exist")
+    Product createProduct(ProductRequestDTO dto) {
+        Product product = productMapper.toEntity(dto)
+        Product savedProduct = productRepository.save(product)
+
+        dto.defaultIngredients.each { ingredientDTO ->
+            def ingredient = inventoryRepository.findById(ingredientDTO.id)
+                    .orElseThrow { new RuntimeException("Inventory not found") }
+            def size = sizeRepository.findById(dto.sizeId)
+                    .orElseThrow { new RuntimeException("Size not found") }
+
+            def defaultIngredient = new ProductDefaultIngredient(
+                    id: new ProductDefaultIngredientId(savedProduct.id, ingredient.inventoryId),
+                    product: savedProduct,
+                    ingredient: ingredient,
+                    size: size,
+                    quantity: ingredientDTO.quantity
+            )
+            productDefaultIngredientRepository.save(defaultIngredient)
         }
-        return productRepository.save(product)
+
+        return savedProduct
     }
 
     Product deleteProduct(Long id) {
@@ -81,7 +114,7 @@ class ProductService {
                     product.size.unit.abbreviation
             )
             return new ProductResponseDTO(
-                    product.productId,
+                    product.id,
                     product.name,
                     product.description,
                     product.price,

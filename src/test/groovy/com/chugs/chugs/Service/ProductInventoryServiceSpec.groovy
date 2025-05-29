@@ -21,7 +21,7 @@ class ProductInventoryServiceSpec extends Specification{
         Long productId = 22L
         BigDecimal quantity = BigDecimal.valueOf(3)
 
-        Product product = new Product(productId: productId, name: "Burger")
+        Product product = new Product(id: productId, name: "Burger")
         Inventory inventory =  new Inventory(inventoryId: inventoryId, name: "Cheese")
 
         productRepository.findById(productId) >> Optional.of(product)
@@ -83,7 +83,7 @@ class ProductInventoryServiceSpec extends Specification{
         Long inventoryId = 2L
         BigDecimal newQuantity = BigDecimal.valueOf(5)
 
-        Product product = new Product(productId: productId, name: "Burger")
+        Product product = new Product(id: productId, name: "Burger")
         Inventory inventory = new Inventory(inventoryId: inventoryId, name: "Lettuce")
 
         ProductInventory productInventory = new ProductInventory(productId: product, inventory: inventory, quantity: BigDecimal.valueOf(2))
@@ -111,7 +111,7 @@ class ProductInventoryServiceSpec extends Specification{
         Long productId = 1L
         Long inventoryId = 2L
 
-        def product = new Product(productId: productId, name: "Smoothie")
+        def product = new Product(id: productId, name: "Smoothie")
         def inventory = new Inventory(inventoryId: inventoryId, name: "Milk")
 
         def productInventory = new ProductInventory(productId: product, inventory: inventory, quantity: BigDecimal.valueOf(2))
